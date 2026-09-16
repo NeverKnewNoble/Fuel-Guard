@@ -1,0 +1,3777 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "023e7524-6d79-4b36-99a4-5d14f4c0ba48",
+  "prevIds": [
+    "966153b1-acad-4d33-855a-47d434acb615"
+  ],
+  "ddl": [
+    {
+      "values": [
+        "active",
+        "invited",
+        "disabled"
+      ],
+      "name": "account_status",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "over_standard",
+        "exceeds_tank_capacity",
+        "repeat_top_up",
+        "no_meter_movement"
+      ],
+      "name": "alert_rule",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "watch",
+        "high",
+        "critical"
+      ],
+      "name": "alert_severity",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "open",
+        "reviewing",
+        "resolved"
+      ],
+      "name": "alert_state",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "name": "correction_status",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "locked",
+        "watch",
+        "flagged"
+      ],
+      "name": "entry_status",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "active",
+        "maintenance",
+        "idle",
+        "retired"
+      ],
+      "name": "equipment_status",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "hours",
+        "km"
+      ],
+      "name": "measurement_basis",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "open",
+        "closed"
+      ],
+      "name": "period_status",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "bulk",
+        "mobile_bowser",
+        "day_tank"
+      ],
+      "name": "tank_kind",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "administrator",
+        "records_taker"
+      ],
+      "name": "user_role",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "alert_fuel_entries",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "alert_reads",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "alert_thresholds",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "audit_log",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "equipment",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "equipment_types",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "fuel_entries",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "fuel_entry_corrections",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "operators",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "reporting_periods",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "sites",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "suppliers",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "tank_dips",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "tank_intakes",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "tank_period_balances",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "tanks",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "theft_alerts",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "users",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "alert_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_fuel_entries"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "fuel_entry_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_fuel_entries"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "alert_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_reads"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_reads"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "read_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_reads"
+    },
+    {
+      "type": "alert_severity",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "level",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_thresholds"
+    },
+    {
+      "type": "numeric(6,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "percent",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_thresholds"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "updated_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_thresholds"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "alert_thresholds"
+    },
+    {
+      "type": "bigint",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "audit_log_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "9223372036854775807",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "actor_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "action",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "entity_type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "entity_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "before",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "after",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "('EQ-' || regexp_replace(lpad(nextval('equipment_code_seq')::text, 12, '0'), '^0{0,9}', ''))",
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "equipment_type_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "make_model",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "registration_no",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "site_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "equipment_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'active'",
+      "generated": null,
+      "identity": null,
+      "name": "status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "numeric(10,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "fuel_tank_capacity_l",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "numeric(8,3)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "l_km_standard_override",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "numeric(8,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "l_hr_standard_override",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "type": "measurement_basis",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "basis",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "type": "numeric(8,3)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "l_km_standard",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "type": "numeric(8,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "l_hr_standard",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "('LOG-' || regexp_replace(lpad(nextval('fuel_entries_code_seq')::text, 12, '0'), '^0{0,8}', ''))",
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "dispensed_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "equipment_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tank_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "operator_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "site_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "location_activity",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(10,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "litres",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(12,1)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "odometer_start",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(12,1)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "odometer_end",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(10,1)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hour_meter_start",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(10,1)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hour_meter_end",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(12,1)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": {
+        "as": "odometer_end - odometer_start",
+        "type": "stored"
+      },
+      "identity": null,
+      "name": "total_km",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(10,1)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": {
+        "as": "hour_meter_end - hour_meter_start",
+        "type": "stored"
+      },
+      "identity": null,
+      "name": "total_hours",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(12,3)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": {
+        "as": "round(litres / NULLIF(odometer_end - odometer_start, 0), 3)",
+        "type": "stored"
+      },
+      "identity": null,
+      "name": "l_per_km",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": {
+        "as": "round(litres / NULLIF(hour_meter_end - hour_meter_start, 0), 2)",
+        "type": "stored"
+      },
+      "identity": null,
+      "name": "l_per_hr",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "numeric(8,3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "unit_cost_ghs",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "entry_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'locked'",
+      "generated": null,
+      "identity": null,
+      "name": "status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "recorded_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "fuel_entry_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "changes",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "reason",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "correction_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'pending'",
+      "generated": null,
+      "identity": null,
+      "name": "status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "requested_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "reviewed_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "reviewed_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "phone",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "site_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "true",
+      "generated": null,
+      "identity": null,
+      "name": "is_active",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reporting_periods"
+    },
+    {
+      "type": "date",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "month",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reporting_periods"
+    },
+    {
+      "type": "period_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'open'",
+      "generated": null,
+      "identity": null,
+      "name": "status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reporting_periods"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "closed_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reporting_periods"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "closed_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "reporting_periods"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "sites"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "sites"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "sites"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "region",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "sites"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "archived_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "sites"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "sites"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "sites"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "suppliers"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "suppliers"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "contact",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "suppliers"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "suppliers"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tank_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "type": "numeric(10,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "measured_l",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "measured_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "recorded_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "note",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "('INT-' || regexp_replace(lpad(nextval('tank_intakes_code_seq')::text, 12, '0'), '^0{0,9}', ''))",
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tank_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "supplier_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "delivery_note",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "numeric(10,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "litres",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "numeric(8,3)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "cost_per_litre",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": {
+        "as": "round(litres * cost_per_litre, 2)",
+        "type": "stored"
+      },
+      "identity": null,
+      "name": "total_cost",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "received_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "received_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "period_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_period_balances"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tank_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_period_balances"
+    },
+    {
+      "type": "numeric(10,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "opening_l",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_period_balances"
+    },
+    {
+      "type": "numeric(10,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "closing_measured_l",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tank_period_balances"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "('TNK-' || regexp_replace(lpad(nextval('tanks_code_seq')::text, 12, '0'), '^0{0,10}', ''))",
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "tank_kind",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "kind",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "site_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "numeric(10,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "capacity_l",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "archived_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "('ALR-' || regexp_replace(lpad(nextval('theft_alerts_code_seq')::text, 12, '0'), '^0{0,9}', ''))",
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "equipment_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "site_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "alert_rule",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "rule",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "alert_severity",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "severity",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "alert_state",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'open'",
+      "generated": null,
+      "identity": null,
+      "name": "state",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "numeric(6,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "variance_pct",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "summary",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "detected_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "resolved_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "resolved_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "resolution_note",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "('USR-' || regexp_replace(lpad(nextval('users_code_seq')::text, 12, '0'), '^0{0,10}', ''))",
+      "generated": null,
+      "identity": null,
+      "name": "code",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "email",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "password_hash",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "user_role",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'records_taker'",
+      "generated": null,
+      "identity": null,
+      "name": "role",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "account_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'invited'",
+      "generated": null,
+      "identity": null,
+      "name": "status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "site_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "invited_by",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_active_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "fuel_entry_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "alert_fuel_entries_fuel_entry_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "alert_fuel_entries"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "alert_reads_user_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "alert_reads"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "entity_type",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "entity_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "created_at",
+          "isExpression": false,
+          "asc": false,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "audit_log_entity_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "site_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "equipment_site_id_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "equipment_type_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "equipment_equipment_type_id_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "equipment_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "dispensed_at",
+          "isExpression": false,
+          "asc": false,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "fuel_entries_equipment_dispensed_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "tank_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "dispensed_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "fuel_entries_tank_dispensed_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "recorded_by",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "dispensed_at",
+          "isExpression": false,
+          "asc": false,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "fuel_entries_recorded_by_dispensed_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "site_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "dispensed_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "fuel_entries_site_dispensed_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "status",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "\"status\" <> 'locked'",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "fuel_entries_needs_review_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "fuel_entry_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "fuel_entry_corrections_entry_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "created_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "\"status\" = 'pending'",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "fuel_entry_corrections_pending_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "tank_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "measured_at",
+          "isExpression": false,
+          "asc": false,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "tank_dips_tank_measured_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "tank_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "received_at",
+          "isExpression": false,
+          "asc": false,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "tank_intakes_tank_received_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "site_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "tanks_site_id_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "state",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "detected_at",
+          "isExpression": false,
+          "asc": false,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "theft_alerts_state_detected_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "equipment_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "detected_at",
+          "isExpression": false,
+          "asc": false,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "theft_alerts_equipment_detected_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "lower(\"email\")",
+          "isExpression": true,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "users_email_lower_key",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "site_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "users_site_id_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "alert_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "theft_alerts",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "alert_fuel_entries_alert_id_theft_alerts_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "alert_fuel_entries"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "fuel_entry_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "fuel_entries",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "alert_fuel_entries_fuel_entry_id_fuel_entries_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "alert_fuel_entries"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "alert_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "theft_alerts",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "alert_reads_alert_id_theft_alerts_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "alert_reads"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "alert_reads_user_id_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "alert_reads"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "updated_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "alert_thresholds_updated_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "alert_thresholds"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "actor_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "audit_log_actor_id_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "audit_log"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "equipment_type_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "equipment_types",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "equipment_equipment_type_id_equipment_types_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "site_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "sites",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "equipment_site_id_sites_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "equipment_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "equipment",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "fuel_entries_equipment_id_equipment_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "tank_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "tanks",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "fuel_entries_tank_id_tanks_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "operator_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "operators",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "fuel_entries_operator_id_operators_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "site_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "sites",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "fuel_entries_site_id_sites_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "recorded_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "fuel_entries_recorded_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "fuel_entry_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "fuel_entries",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "fuel_entry_corrections_fuel_entry_id_fuel_entries_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "requested_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "fuel_entry_corrections_requested_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "reviewed_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "fuel_entry_corrections_reviewed_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "site_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "sites",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "operators_site_id_sites_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "operators_user_id_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "operators"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "closed_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "reporting_periods_closed_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "reporting_periods"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "tank_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "tanks",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "tank_dips_tank_id_tanks_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "recorded_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "tank_dips_recorded_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "tank_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "tanks",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "tank_intakes_tank_id_tanks_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "supplier_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "suppliers",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "tank_intakes_supplier_id_suppliers_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "received_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "tank_intakes_received_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "period_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "reporting_periods",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "tank_period_balances_period_id_reporting_periods_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "tank_period_balances"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "tank_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "tanks",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "tank_period_balances_tank_id_tanks_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "tank_period_balances"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "site_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "sites",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "tanks_site_id_sites_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "equipment_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "equipment",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "theft_alerts_equipment_id_equipment_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "site_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "sites",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "theft_alerts_site_id_sites_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "resolved_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "theft_alerts_resolved_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "site_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "sites",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "RESTRICT",
+      "name": "users_site_id_sites_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "invited_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "users_invited_by_users_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "columns": [
+        "alert_id",
+        "fuel_entry_id"
+      ],
+      "nameExplicit": false,
+      "name": "alert_fuel_entries_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "alert_fuel_entries"
+    },
+    {
+      "columns": [
+        "alert_id",
+        "user_id"
+      ],
+      "nameExplicit": false,
+      "name": "alert_reads_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "alert_reads"
+    },
+    {
+      "columns": [
+        "period_id",
+        "tank_id"
+      ],
+      "nameExplicit": false,
+      "name": "tank_period_balances_pkey",
+      "entityType": "pks",
+      "schema": "public",
+      "table": "tank_period_balances"
+    },
+    {
+      "columns": [
+        "level"
+      ],
+      "nameExplicit": false,
+      "name": "alert_thresholds_pkey",
+      "schema": "public",
+      "table": "alert_thresholds",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "audit_log_pkey",
+      "schema": "public",
+      "table": "audit_log",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "equipment_pkey",
+      "schema": "public",
+      "table": "equipment",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "equipment_types_pkey",
+      "schema": "public",
+      "table": "equipment_types",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "fuel_entries_pkey",
+      "schema": "public",
+      "table": "fuel_entries",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "fuel_entry_corrections_pkey",
+      "schema": "public",
+      "table": "fuel_entry_corrections",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "operators_pkey",
+      "schema": "public",
+      "table": "operators",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "reporting_periods_pkey",
+      "schema": "public",
+      "table": "reporting_periods",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "sites_pkey",
+      "schema": "public",
+      "table": "sites",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "suppliers_pkey",
+      "schema": "public",
+      "table": "suppliers",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "tank_dips_pkey",
+      "schema": "public",
+      "table": "tank_dips",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "tank_intakes_pkey",
+      "schema": "public",
+      "table": "tank_intakes",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "tanks_pkey",
+      "schema": "public",
+      "table": "tanks",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "theft_alerts_pkey",
+      "schema": "public",
+      "table": "theft_alerts",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "users_pkey",
+      "schema": "public",
+      "table": "users",
+      "entityType": "pks"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "supplier_id",
+        "delivery_note"
+      ],
+      "nullsNotDistinct": false,
+      "name": "tank_intakes_supplier_delivery_note_key",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "name": "equipment_code_key",
+      "schema": "public",
+      "table": "equipment",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "registration_no"
+      ],
+      "nullsNotDistinct": false,
+      "name": "equipment_registration_no_key",
+      "schema": "public",
+      "table": "equipment",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "name"
+      ],
+      "nullsNotDistinct": false,
+      "name": "equipment_types_name_key",
+      "schema": "public",
+      "table": "equipment_types",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "name": "fuel_entries_code_key",
+      "schema": "public",
+      "table": "fuel_entries",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "operators_user_id_key",
+      "schema": "public",
+      "table": "operators",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "month"
+      ],
+      "nullsNotDistinct": false,
+      "name": "reporting_periods_month_key",
+      "schema": "public",
+      "table": "reporting_periods",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "name": "sites_code_key",
+      "schema": "public",
+      "table": "sites",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "name"
+      ],
+      "nullsNotDistinct": false,
+      "name": "suppliers_name_key",
+      "schema": "public",
+      "table": "suppliers",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "name": "tank_intakes_code_key",
+      "schema": "public",
+      "table": "tank_intakes",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "name": "tanks_code_key",
+      "schema": "public",
+      "table": "tanks",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "name": "theft_alerts_code_key",
+      "schema": "public",
+      "table": "theft_alerts",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "name": "users_code_key",
+      "schema": "public",
+      "table": "users",
+      "entityType": "uniques"
+    },
+    {
+      "value": "\"percent\" > 0",
+      "name": "alert_thresholds_percent_positive",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "alert_thresholds"
+    },
+    {
+      "value": "\"fuel_tank_capacity_l\" IS NULL OR \"fuel_tank_capacity_l\" > 0",
+      "name": "equipment_fuel_tank_capacity_positive",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "value": "(\"l_km_standard_override\" IS NULL OR \"l_km_standard_override\" > 0)\n        AND (\"l_hr_standard_override\" IS NULL OR \"l_hr_standard_override\" > 0)",
+      "name": "equipment_overrides_positive",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "equipment"
+    },
+    {
+      "value": "(\"basis\" = 'km' AND \"l_km_standard\" IS NOT NULL AND \"l_hr_standard\" IS NULL)\n        OR (\"basis\" = 'hours' AND \"l_hr_standard\" IS NOT NULL AND \"l_km_standard\" IS NULL)",
+      "name": "equipment_types_standard_matches_basis",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "value": "COALESCE(\"l_km_standard\", \"l_hr_standard\") > 0",
+      "name": "equipment_types_standard_positive",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "equipment_types"
+    },
+    {
+      "value": "\"litres\" > 0",
+      "name": "fuel_entries_litres_positive",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "value": "\"unit_cost_ghs\" >= 0",
+      "name": "fuel_entries_unit_cost_non_negative",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "value": "\"odometer_start\" IS NULL OR \"odometer_end\" IS NULL OR \"odometer_end\" >= \"odometer_start\"",
+      "name": "fuel_entries_odometer_order",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "value": "\"hour_meter_start\" IS NULL OR \"hour_meter_end\" IS NULL OR \"hour_meter_end\" >= \"hour_meter_start\"",
+      "name": "fuel_entries_hour_meter_order",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "value": "(\"odometer_start\" IS NOT NULL AND \"odometer_end\" IS NOT NULL)\n        OR (\"hour_meter_start\" IS NOT NULL AND \"hour_meter_end\" IS NOT NULL)",
+      "name": "fuel_entries_has_meter_reading",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "fuel_entries"
+    },
+    {
+      "value": "(\"status\" = 'pending') = (\"reviewed_by\" IS NULL AND \"reviewed_at\" IS NULL)",
+      "name": "fuel_entry_corrections_review_consistent",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "fuel_entry_corrections"
+    },
+    {
+      "value": "EXTRACT(DAY FROM \"month\") = 1",
+      "name": "reporting_periods_first_of_month",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "reporting_periods"
+    },
+    {
+      "value": "(\"status\" = 'closed') = (\"closed_by\" IS NOT NULL AND \"closed_at\" IS NOT NULL)",
+      "name": "reporting_periods_closed_consistent",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "reporting_periods"
+    },
+    {
+      "value": "\"measured_l\" >= 0",
+      "name": "tank_dips_measured_non_negative",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "tank_dips"
+    },
+    {
+      "value": "\"litres\" > 0",
+      "name": "tank_intakes_litres_positive",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "value": "\"cost_per_litre\" >= 0",
+      "name": "tank_intakes_cost_non_negative",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "tank_intakes"
+    },
+    {
+      "value": "\"opening_l\" >= 0 AND (\"closing_measured_l\" IS NULL OR \"closing_measured_l\" >= 0)",
+      "name": "tank_period_balances_non_negative",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "tank_period_balances"
+    },
+    {
+      "value": "\"capacity_l\" > 0",
+      "name": "tanks_capacity_positive",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "tanks"
+    },
+    {
+      "value": "(\"state\" = 'resolved') = (\"resolved_by\" IS NOT NULL AND \"resolved_at\" IS NOT NULL)",
+      "name": "theft_alerts_resolved_consistent",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "theft_alerts"
+    },
+    {
+      "value": "\"role\" <> 'records_taker' OR \"site_id\" IS NOT NULL",
+      "name": "users_records_taker_has_site",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "1",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "equipment_code_seq",
+      "entityType": "sequences",
+      "schema": "public"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "1",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "fuel_entries_code_seq",
+      "entityType": "sequences",
+      "schema": "public"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "1",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "tank_intakes_code_seq",
+      "entityType": "sequences",
+      "schema": "public"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "1",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "tanks_code_seq",
+      "entityType": "sequences",
+      "schema": "public"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "1",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "theft_alerts_code_seq",
+      "entityType": "sequences",
+      "schema": "public"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "1",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "users_code_seq",
+      "entityType": "sequences",
+      "schema": "public"
+    },
+    {
+      "definition": "\n  SELECT\n    (dispensed_at AT TIME ZONE 'Africa/Accra')::date AS day,\n    site_id,\n    sum(litres) AS litres,\n    count(*) AS entries\n  FROM fuel_entries\n  GROUP BY 1, 2\n",
+      "with": null,
+      "withNoData": null,
+      "using": null,
+      "tablespace": null,
+      "materialized": false,
+      "name": "v_daily_issuance",
+      "entityType": "views",
+      "schema": "public"
+    },
+    {
+      "definition": "\n  SELECT\n    e.id AS equipment_id,\n    e.code AS equipment_code,\n    t.id AS equipment_type_id,\n    t.name AS type_name,\n    t.basis,\n    e.make_model,\n    e.site_id,\n    e.status,\n    COALESCE(e.l_km_standard_override, t.l_km_standard) AS l_km_standard,\n    COALESCE(e.l_hr_standard_override, t.l_hr_standard) AS l_hr_standard\n  FROM equipment e\n  JOIN equipment_types t ON t.id = e.equipment_type_id\n",
+      "with": null,
+      "withNoData": null,
+      "using": null,
+      "tablespace": null,
+      "materialized": false,
+      "name": "v_equipment_standards",
+      "entityType": "views",
+      "schema": "public"
+    },
+    {
+      "definition": "\n  WITH base AS (\n    SELECT\n      p.id AS period_id,\n      p.month,\n      e.id AS equipment_id,\n      e.code AS equipment_code,\n      t.name AS type_name,\n      t.basis,\n      e.site_id,\n      COALESCE(m.litres, 0) AS litres,\n      m.total_km,\n      m.total_hours,\n      round(m.litres / NULLIF(m.total_km, 0), 3) AS avg_l_per_km,\n      round(m.litres / NULLIF(m.total_hours, 0), 2) AS avg_l_per_hr,\n      COALESCE(e.l_km_standard_override, t.l_km_standard) AS l_km_standard,\n      COALESCE(e.l_hr_standard_override, t.l_hr_standard) AS l_hr_standard,\n      COALESCE(m.cost_ghs, 0) AS cost_ghs\n    FROM reporting_periods p\n    CROSS JOIN equipment e\n    JOIN equipment_types t ON t.id = e.equipment_type_id\n    LEFT JOIN LATERAL (\n      SELECT\n        sum(f.litres) AS litres,\n        sum(f.total_km) AS total_km,\n        sum(f.total_hours) AS total_hours,\n        round(sum(f.litres * f.unit_cost_ghs), 2) AS cost_ghs\n      FROM fuel_entries f\n      WHERE f.equipment_id = e.id\n        AND f.dispensed_at >= p.month::timestamp AT TIME ZONE 'Africa/Accra'\n        AND f.dispensed_at < (p.month + interval '1 month') AT TIME ZONE 'Africa/Accra'\n    ) m ON true\n    WHERE e.status <> 'retired'\n  ),\n  scored AS (\n    SELECT\n      base.*,\n      round(\n        CASE base.basis\n          WHEN 'km' THEN (avg_l_per_km - l_km_standard) / NULLIF(l_km_standard, 0) * 100\n          ELSE (avg_l_per_hr - l_hr_standard) / NULLIF(l_hr_standard, 0) * 100\n        END, 2\n      ) AS variance_pct\n    FROM base\n  )\n  SELECT\n    scored.*,\n    CASE\n      WHEN variance_pct IS NULL THEN 'normal'\n      WHEN variance_pct >= (SELECT percent FROM alert_thresholds WHERE level = 'critical') THEN 'critical'\n      WHEN variance_pct >= (SELECT percent FROM alert_thresholds WHERE level = 'high') THEN 'high'\n      WHEN variance_pct >= (SELECT percent FROM alert_thresholds WHERE level = 'watch') THEN 'watch'\n      ELSE 'normal'\n    END AS status\n  FROM scored\n",
+      "with": null,
+      "withNoData": null,
+      "using": null,
+      "tablespace": null,
+      "materialized": false,
+      "name": "v_monthly_equipment_summary",
+      "entityType": "views",
+      "schema": "public"
+    },
+    {
+      "definition": "\n  SELECT\n    tk.id AS tank_id,\n    tk.code AS tank_code,\n    tk.name,\n    tk.site_id,\n    tk.capacity_l,\n    COALESCE(d.measured_l, 0) + COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0) AS current_l,\n    d.measured_l,\n    d.measured_at,\n    COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0) AS since_dip_l,\n    round(\n      (COALESCE(d.measured_l, 0) + COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0)) / tk.capacity_l * 100,\n      1\n    ) AS fill_pct,\n    i.last_refill_at\n  FROM tanks tk\n  LEFT JOIN LATERAL (\n    SELECT measured_l, measured_at FROM tank_dips\n    WHERE tank_id = tk.id ORDER BY measured_at DESC LIMIT 1\n  ) d ON true\n  LEFT JOIN LATERAL (\n    SELECT\n      (SELECT sum(litres) FROM tank_intakes\n        WHERE tank_id = tk.id AND (d.measured_at IS NULL OR received_at > d.measured_at)) AS intake_l,\n      (SELECT sum(litres) FROM fuel_entries\n        WHERE tank_id = tk.id AND (d.measured_at IS NULL OR dispensed_at > d.measured_at)) AS issued_l\n  ) m ON true\n  LEFT JOIN LATERAL (\n    SELECT max(received_at) AS last_refill_at FROM tank_intakes WHERE tank_id = tk.id\n  ) i ON true\n  WHERE tk.archived_at IS NULL\n",
+      "with": null,
+      "withNoData": null,
+      "using": null,
+      "tablespace": null,
+      "materialized": false,
+      "name": "v_tank_levels",
+      "entityType": "views",
+      "schema": "public"
+    },
+    {
+      "definition": "\n  SELECT\n    p.id AS period_id,\n    p.month,\n    tk.id AS tank_id,\n    tk.code AS tank_code,\n    tk.name,\n    COALESCE(b.opening_l, 0) AS opening_l,\n    COALESCE(i.intake_l, 0) AS intake_l,\n    COALESCE(f.issued_l, 0) AS issued_l,\n    COALESCE(b.opening_l, 0) + COALESCE(i.intake_l, 0) - COALESCE(f.issued_l, 0) AS expected_l,\n    COALESCE(b.closing_measured_l, d.measured_l) AS measured_l,\n    COALESCE(b.closing_measured_l, d.measured_l)\n      - (COALESCE(b.opening_l, 0) + COALESCE(i.intake_l, 0) - COALESCE(f.issued_l, 0)) AS variance_l\n  FROM (\n    SELECT\n      id,\n      month,\n      month::timestamp AT TIME ZONE 'Africa/Accra' AS starts_at,\n      (month + interval '1 month') AT TIME ZONE 'Africa/Accra' AS ends_at\n    FROM reporting_periods\n  ) p\n  CROSS JOIN tanks tk\n  LEFT JOIN tank_period_balances b ON b.period_id = p.id AND b.tank_id = tk.id\n  LEFT JOIN LATERAL (\n    SELECT sum(litres) AS intake_l FROM tank_intakes\n    WHERE tank_id = tk.id AND received_at >= p.starts_at AND received_at < p.ends_at\n  ) i ON true\n  LEFT JOIN LATERAL (\n    SELECT sum(litres) AS issued_l FROM fuel_entries\n    WHERE tank_id = tk.id AND dispensed_at >= p.starts_at AND dispensed_at < p.ends_at\n  ) f ON true\n  LEFT JOIN LATERAL (\n    SELECT measured_l FROM tank_dips\n    WHERE tank_id = tk.id AND measured_at < p.ends_at\n    ORDER BY measured_at DESC LIMIT 1\n  ) d ON true\n  WHERE tk.archived_at IS NULL\n",
+      "with": null,
+      "withNoData": null,
+      "using": null,
+      "tablespace": null,
+      "materialized": false,
+      "name": "v_tank_reconciliation",
+      "entityType": "views",
+      "schema": "public"
+    }
+  ],
+  "renames": []
+}
