@@ -38,7 +38,7 @@ export default async function TankersPage() {
         <PageHeader
           eyebrow="Administration"
           title="Tankers"
-          description="Bulk stock held on site. Record every delivery taken into a tanker here; equipment draws are recorded on Fuel Entry."
+          // description="Bulk stock held on site. Record every delivery taken into a tanker here; equipment draws are recorded on Fuel Entry."
           action={
             <div className="flex flex-col gap-2 sm:flex-row">
               <AddTankerButton />

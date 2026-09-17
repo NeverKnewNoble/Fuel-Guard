@@ -28,7 +28,7 @@ export default async function UsersAndRolesPage() {
         <PageHeader
           eyebrow="Set-up"
           title="Users & Roles"
-          description="Decide who records fuel and who reviews it. Record takers can submit entries but never amend them."
+          // description="Decide who records fuel and who reviews it. Record takers can submit entries but never amend them."
           action={<CreateUserButton />}
         />
 

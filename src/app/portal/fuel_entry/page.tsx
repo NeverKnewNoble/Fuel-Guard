@@ -53,9 +53,11 @@ export default async function FuelEntryPage() {
       <header>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">Recording</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Fuel Entry</h1>
+        {/*
         <p className="mt-2 max-w-2xl text-sm text-slate-500 sm:text-base">
           Capture fills at the pump and review what you&apos;ve already submitted.
         </p>
+        */}
       </header>
 
       <HydrationBoundary state={dehydrate(queryClient)}>

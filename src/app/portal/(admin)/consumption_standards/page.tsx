@@ -22,7 +22,7 @@ export default async function ConsumptionStandardsPage() {
       <PageHeader
         eyebrow="Set-up"
         title="Consumption Standards"
-        description="Set L/km and L/hr targets by equipment type. Variances beyond these thresholds trigger automatic alerts."
+        // description="Set L/km and L/hr targets by equipment type. Variances beyond these thresholds trigger automatic alerts."
       />
 
       <HydrationBoundary state={dehydrate(queryClient)}>

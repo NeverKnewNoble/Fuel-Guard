@@ -183,7 +183,7 @@ export default function MonthlySummaryView({ initialPeriodId }: { initialPeriodI
       <PageHeader
         eyebrow="Administration"
         title={`Monthly Summary${period ? ` — ${period.label}` : ""}`}
-        description="All sites · all equipment, measured against consumption standards."
+        // description="All sites · all equipment, measured against consumption standards."
         action={
           <div className="flex flex-col gap-2 sm:flex-row">
             <label className="sr-only" htmlFor="ms-period">

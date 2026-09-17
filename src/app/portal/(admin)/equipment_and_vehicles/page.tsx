@@ -28,7 +28,7 @@ export default async function EquipmentAndVehiclesPage() {
         <PageHeader
           eyebrow="Set-up"
           title="Equipment & Vehicles"
-          description="Every unit that draws fuel across all sites, with the standard its entries are checked against."
+          // description="Every unit that draws fuel across all sites, with the standard its entries are checked against."
           action={<AddEquipmentButton />}
         />
 
