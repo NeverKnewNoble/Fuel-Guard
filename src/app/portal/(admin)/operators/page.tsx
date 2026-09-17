@@ -26,7 +26,7 @@ export default async function OperatorsPage() {
         <PageHeader
           eyebrow="Set-up"
           title="Drivers & Operators"
-          description="The people who draw fuel. Every fuel entry records who was operating the equipment."
+          // description="The people who draw fuel. Every fuel entry records who was operating the equipment."
           action={<AddOperatorButton />}
         />
 

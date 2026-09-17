@@ -22,7 +22,7 @@ export default async function TheftAlertsPage() {
       <PageHeader
         eyebrow="Administration"
         title="Theft & Anomaly Alerts"
-        description="Fills that break your rules — impossible volumes, repeat top-ups, and consumption past standard."
+        // description="Fills that break your rules — impossible volumes, repeat top-ups, and consumption past standard."
       />
 
       <HydrationBoundary state={dehydrate(queryClient)}>

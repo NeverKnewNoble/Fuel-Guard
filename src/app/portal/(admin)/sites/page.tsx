@@ -20,7 +20,7 @@ export default async function SitesPage() {
         <PageHeader
           eyebrow="Set-up"
           title="Sites"
-          description="The places work happens. Every unit, tanker, records taker and fuel entry belongs to one."
+          // description="The places work happens. Every unit, tanker, records taker and fuel entry belongs to one."
           action={<AddSiteButton />}
         />
 

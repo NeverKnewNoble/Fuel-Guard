@@ -5,8 +5,9 @@ import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { login } from "@/app/auth/actions";
-import type { DemoUser } from "@/types/user";
-import { demoUsers } from "@/utils/marketingContent";
+// Demo quick access is commented out below; these come back with it.
+// import type { DemoUser } from "@/types/user";
+// import { demoUsers } from "@/utils/marketingContent";
 
 const inputClass =
   "mt-2 h-12 w-full rounded-xl bg-slate-100 px-4 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-brand-500/50 disabled:opacity-60";
@@ -21,7 +22,7 @@ export default function LoginForm({
 }) {
   const [state, formAction, pending] = useActionState(login, undefined);
   const [email, setEmail] = useState("");
-  const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
+  // const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
 
   const error = state?.error ?? initialError;
 
@@ -34,10 +35,10 @@ export default function LoginForm({
     if (initialError) toast.error("Sign-in failed", { description: initialError, id: "login-error" });
   }, [initialError]);
 
-  function selectDemoUser(user: DemoUser) {
-    setSelectedDemo(user.role);
-    setEmail(user.email);
-  }
+  // function selectDemoUser(user: DemoUser) {
+  //   setSelectedDemo(user.role);
+  //   setEmail(user.email);
+  // }
 
   return (
     <div className="relative flex min-h-screen flex-1 flex-col items-center justify-center bg-slate-50 px-4 py-12">
@@ -138,7 +139,10 @@ export default function LoginForm({
             </button>
           </form>
 
-          {/* Demo quick access */}
+          {/*
+            Demo quick access — removed at the client's request: it named real staff on a public
+            sign-in page. Restore this block (and `selectDemoUser` above) only for a demo build.
+
           <div className="mt-7 border-t border-slate-200 pt-5">
             <p className="text-center text-xs font-medium uppercase tracking-wider text-slate-400">
               Demo &mdash; Quick access
@@ -173,6 +177,7 @@ export default function LoginForm({
               })}
             </div>
           </div>
+          */}
         </div>
       </div>
     </div>
