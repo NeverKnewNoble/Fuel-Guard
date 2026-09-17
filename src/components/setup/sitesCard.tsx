@@ -102,7 +102,7 @@ export default function SitesCard() {
               trailing={
                 <>
                   {site.archivedAt && (
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-500">
                       <RotateCcw className="h-3 w-3" aria-hidden />
                       Archived
                     </span>
@@ -121,7 +121,7 @@ export default function SitesCard() {
       <div className="hidden overflow-x-auto lg:block">
         <table className="w-full min-w-150 border-collapse text-sm">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/60 text-[11px] uppercase tracking-wider text-slate-400">
+            <tr className="border-b border-slate-100 bg-slate-50/60 text-xs uppercase tracking-wider text-slate-400">
               <th scope="col" className="px-5 py-2.5 text-left font-semibold sm:px-6">Code</th>
               <th scope="col" className="px-3 py-2.5 text-left font-semibold">Site</th>
               <th scope="col" className="px-3 py-2.5 text-left font-semibold">Region</th>

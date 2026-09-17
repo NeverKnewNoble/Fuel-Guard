@@ -8,7 +8,14 @@ import { IntakeRowActions } from "@/components/tankers/intakeRowActions";
 import DataCard from "@/components/ui/dataCard";
 import EmptyState from "@/components/ui/emptyState";
 import ErrorState from "@/components/ui/errorState";
-import { MobileField, MobileFields, MobileList, MobileRecordHeader } from "@/components/ui/mobileList";
+import {
+  DetailGroup,
+  DetailItem,
+  DetailPanel,
+  ExpandButton,
+  useDisclosure,
+} from "@/components/ui/detailDisclosure";
+import { MobileList, MobileRecordHeader } from "@/components/ui/mobileList";
 import {
   RowCheckbox,
   SelectAllBar,
@@ -19,11 +26,12 @@ import {
 } from "@/components/ui/selection";
 import { DataCardBodySkeleton } from "@/components/ui/skeleton";
 import { intakesQuery, tanksQuery } from "@/queries/tankQueries";
+import type { IntakeRow } from "@/types/tank";
 import { formatDateTime } from "@/utils/formatDate";
 
 function VoidPill() {
   return (
-    <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+    <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-500">
       <Ban className="h-3 w-3 shrink-0" aria-hidden />
       Void
     </span>
@@ -31,6 +39,104 @@ function VoidPill() {
 }
 
 const ghs = (n: number) => `GHS ${n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+/** The delivery note, the unit price and who received it — the paperwork, out of the way until asked for. */
+function IntakeDetails({ intake, id, flush = false }: { intake: IntakeRow; id: string; flush?: boolean }) {
+  return (
+    <DetailPanel id={id} flush={flush}>
+      <DetailGroup title="Delivery">
+        <DetailItem label="Intake">{intake.code}</DetailItem>
+        <DetailItem label="Delivery note">{intake.deliveryNote}</DetailItem>
+        <DetailItem label="Tanker">{intake.tankName}</DetailItem>
+      </DetailGroup>
+
+      <DetailGroup title="Cost">
+        <DetailItem label="Total" emphasis>
+          {ghs(intake.totalCost)}
+        </DetailItem>
+        <DetailItem label="Price per litre">{intake.costPerLitre.toFixed(3)}</DetailItem>
+        <DetailItem label="Litres received">{intake.litres.toLocaleString()} L</DetailItem>
+      </DetailGroup>
+
+      <DetailGroup title="Record">
+        <DetailItem label="Received by">{intake.receivedBy}</DetailItem>
+        <DetailItem label="Received at">{formatDateTime(intake.receivedAt)}</DetailItem>
+        {intake.voidedAt && <DetailItem label="Void reason">{intake.voidReason ?? "No reason given"}</DetailItem>}
+      </DetailGroup>
+    </DetailPanel>
+  );
+}
+
+function IntakeTableRow({ intake }: { intake: IntakeRow }) {
+  const details = useDisclosure();
+  return (
+    <>
+      <SelectableRow
+        id={intake.id}
+        className={`transition-colors hover:bg-slate-50/70 ${intake.voidedAt ? "opacity-70" : ""}`}
+      >
+        <td className="px-5 py-4 sm:px-6">
+          <RowCheckbox id={intake.id} label={intake.code} />
+        </td>
+        <td className="px-3 py-4 whitespace-nowrap tabular-nums text-slate-500">{formatDateTime(intake.receivedAt)}</td>
+        <td className="px-3 py-4">
+          <span className={`block font-medium text-slate-900 ${intake.voidedAt ? "line-through" : ""}`}>{intake.tankName}</span>
+          <span className="block text-sm text-slate-500">{intake.supplier}</span>
+        </td>
+        <td className="px-3 py-4 text-right">
+          <span className="font-semibold tabular-nums text-slate-900">{intake.litres.toLocaleString()}</span>
+          <span className="ml-1 text-slate-400">L</span>
+        </td>
+        <td className="px-3 py-4 text-right tabular-nums text-slate-700">{ghs(intake.totalCost)}</td>
+        <td className="px-3 py-4 text-right">{intake.voidedAt && <VoidPill />}</td>
+        <td className="px-5 py-4 sm:px-6">
+          <div className="flex items-center justify-end gap-1">
+            <ExpandButton {...details.buttonProps} label={`details for ${intake.code}`} />
+            <IntakeRowActions intake={intake} />
+          </div>
+        </td>
+      </SelectableRow>
+      {details.open && (
+        <tr>
+          <td colSpan={7} className="p-0">
+            <IntakeDetails intake={intake} id={details.panelId} flush />
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
+
+function IntakeCard({ intake }: { intake: IntakeRow }) {
+  const details = useDisclosure();
+  return (
+    <SelectableRow id={intake.id} as="li" className={intake.voidedAt ? "opacity-70" : ""}>
+      <div className="px-5 py-4 sm:px-6">
+        <MobileRecordHeader
+          select={<RowCheckbox id={intake.id} label={intake.code} />}
+          title={<span className={intake.voidedAt ? "line-through" : ""}>{intake.tankName}</span>}
+          subtitle={intake.voidedAt ? `Void — ${intake.voidReason ?? "no reason given"}` : intake.supplier}
+          trailing={
+            <>
+              {intake.voidedAt && <VoidPill />}
+              <IntakeRowActions intake={intake} />
+            </>
+          }
+        />
+        <div className="mt-3 flex items-baseline gap-3">
+          <span className="text-2xl font-semibold tabular-nums text-slate-900">{intake.litres.toLocaleString()}</span>
+          <span className="text-slate-400">L</span>
+          <span className="ml-auto text-sm tabular-nums text-slate-500">{formatDateTime(intake.receivedAt)}</span>
+        </div>
+        <div className="mt-1 flex items-center justify-between gap-3">
+          <span className="text-sm tabular-nums text-slate-500">{ghs(intake.totalCost)}</span>
+          <ExpandButton {...details.buttonProps} label={`details for ${intake.code}`} variant="text" />
+        </div>
+      </div>
+      {details.open && <IntakeDetails intake={intake} id={details.panelId} />}
+    </SelectableRow>
+  );
+}
 
 /** A delivery recorded in error is voided, not deleted: it stays in the log but drops out of stock, costs and the reconciliation. */
 export default function IntakeLogCard({ currentUserId }: { currentUserId: string }) {
@@ -65,85 +171,31 @@ export default function IntakeLogCard({ currentUserId }: { currentUserId: string
       <SelectAllBar label="intakes" />
       <MobileList>
         {intakes.map((intake) => (
-          <SelectableRow key={intake.id} id={intake.id} as="li" className={`px-5 py-4 sm:px-6 ${intake.voidedAt ? "opacity-70" : ""}`}>
-            <MobileRecordHeader
-              select={<RowCheckbox id={intake.id} label={intake.code} />}
-              title={
-                <>
-                  <span className={`font-mono ${intake.voidedAt ? "line-through" : ""}`}>{intake.code}</span> · {intake.tankName}
-                </>
-              }
-              subtitle={intake.voidedAt ? `Void — ${intake.voidReason ?? "no reason given"}` : intake.supplier}
-              trailing={
-                <>
-                  {intake.voidedAt && <VoidPill />}
-                  <IntakeRowActions intake={intake} />
-                </>
-              }
-            />
-            <MobileFields>
-              <MobileField label="Litres"><span className="font-medium tabular-nums text-slate-900">{intake.litres.toLocaleString()} L</span></MobileField>
-              <MobileField label="Cost"><span className="tabular-nums">{ghs(intake.totalCost)}</span></MobileField>
-              <MobileField label="Delivery note"><span className="font-mono text-xs">{intake.deliveryNote}</span></MobileField>
-              <MobileField label="Received">
-                <span className="block font-mono text-xs tabular-nums">{formatDateTime(intake.receivedAt)}</span>
-                <span className="block truncate text-xs text-slate-400">{intake.receivedBy}</span>
-              </MobileField>
-            </MobileFields>
-          </SelectableRow>
+          <IntakeCard key={intake.id} intake={intake} />
         ))}
       </MobileList>
-      <div className="hidden overflow-x-auto lg:block">
-        <table className="w-full min-w-[1000px] border-collapse text-sm">
+      <div className="hidden lg:block">
+        <table className="w-full border-collapse text-[15px]">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/60 text-[11px] uppercase tracking-wider text-slate-400">
-              <th scope="col" className="w-10 px-5 py-2.5 text-left sm:px-6">
+            <tr className="border-b border-slate-100 bg-slate-50/60 text-xs uppercase tracking-wider text-slate-400">
+              <th scope="col" className="w-10 px-5 py-3 text-left sm:px-6">
                 <SelectAllCheckbox label="intakes" />
               </th>
-              <th scope="col" className="px-3 py-2.5 text-left font-semibold">Intake</th>
-              <th scope="col" className="px-3 py-2.5 text-left font-semibold">Tanker</th>
-              <th scope="col" className="px-3 py-2.5 text-left font-semibold">Supplier</th>
-              <th scope="col" className="px-3 py-2.5 text-left font-semibold">Delivery note</th>
-              <th scope="col" className="px-3 py-2.5 text-right font-semibold">Litres</th>
-              <th scope="col" className="px-3 py-2.5 text-right font-semibold">Cost</th>
-              <th scope="col" className="px-3 py-2.5 text-right font-semibold">Received</th>
-              <th scope="col" className="px-5 py-2.5 text-right font-semibold sm:px-6">Actions</th>
+              <th scope="col" className="px-3 py-3 text-left font-semibold">Received</th>
+              <th scope="col" className="px-3 py-3 text-left font-semibold">Tanker / supplier</th>
+              <th scope="col" className="px-3 py-3 text-right font-semibold">Litres</th>
+              <th scope="col" className="px-3 py-3 text-right font-semibold">Cost</th>
+              <th scope="col" className="w-20 px-3 py-3 text-right font-semibold">
+                <span className="sr-only">Void</span>
+              </th>
+              <th scope="col" className="w-24 px-5 py-3 text-right font-semibold sm:px-6">
+                <span className="sr-only">Details and actions</span>
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {intakes.map((intake) => (
-              <SelectableRow
-                key={intake.id}
-                id={intake.id}
-                className={`transition-colors hover:bg-slate-50/70 ${intake.voidedAt ? "text-slate-400" : ""}`}
-              >
-                <td className="px-5 py-3.5 sm:px-6">
-                  <RowCheckbox id={intake.id} label={intake.code} />
-                </td>
-                <td className="px-3 py-3.5 font-mono text-sm font-semibold text-slate-900">
-                  <span className={intake.voidedAt ? "line-through" : ""}>{intake.code}</span>
-                  {intake.voidedAt && (
-                    <span className="ml-2 align-middle">
-                      <VoidPill />
-                    </span>
-                  )}
-                </td>
-                <td className="px-3 py-3.5 text-slate-700">{intake.tankName}</td>
-                <td className="px-3 py-3.5 text-slate-500">{intake.supplier}</td>
-                <td className="px-3 py-3.5 font-mono text-xs text-slate-500">{intake.deliveryNote}</td>
-                <td className="px-3 py-3.5 text-right font-medium tabular-nums text-slate-900">{intake.litres.toLocaleString()} L</td>
-                <td className="px-3 py-3.5 text-right tabular-nums text-slate-700">
-                  {ghs(intake.totalCost)}
-                  <span className="block text-xs text-slate-400">@ {intake.costPerLitre.toFixed(3)}/L</span>
-                </td>
-                <td className="px-3 py-3.5 text-right">
-                  <span className="block font-mono text-xs tabular-nums text-slate-500">{formatDateTime(intake.receivedAt)}</span>
-                  <span className="block text-xs text-slate-400">{intake.receivedBy}</span>
-                </td>
-                <td className="px-5 py-3.5 text-right sm:px-6">
-                  <IntakeRowActions intake={intake} />
-                </td>
-              </SelectableRow>
+              <IntakeTableRow key={intake.id} intake={intake} />
             ))}
           </tbody>
         </table>

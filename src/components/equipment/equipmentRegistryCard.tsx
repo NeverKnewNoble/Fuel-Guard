@@ -8,7 +8,14 @@ import { AddEquipmentButton } from "@/components/modals/triggers";
 import DataCard from "@/components/ui/dataCard";
 import EmptyState from "@/components/ui/emptyState";
 import ErrorState from "@/components/ui/errorState";
-import { MobileField, MobileFields, MobileList, MobileRecordHeader } from "@/components/ui/mobileList";
+import {
+  DetailGroup,
+  DetailItem,
+  DetailPanel,
+  ExpandButton,
+  useDisclosure,
+} from "@/components/ui/detailDisclosure";
+import { MobileList, MobileRecordHeader } from "@/components/ui/mobileList";
 import {
   RowCheckbox,
   SelectAllBar,
@@ -20,7 +27,106 @@ import {
 import { DataCardBodySkeleton } from "@/components/ui/skeleton";
 import StatusPill from "@/components/ui/statusPill";
 import { equipmentListQuery } from "@/queries/equipmentQueries";
+import type { EquipmentRow } from "@/types/equipment";
 import { dash, equipmentStatusStyles } from "@/utils/statusUtils";
+
+/** Make and model, both standards, and which one actually applies to this unit. */
+function UnitDetails({ unit, id, flush = false }: { unit: EquipmentRow; id: string; flush?: boolean }) {
+  const km = unit.basis === "km";
+  return (
+    <DetailPanel id={id} flush={flush}>
+      <DetailGroup title="Unit">
+        <DetailItem label="Equipment ID">{unit.code}</DetailItem>
+        <DetailItem label="Type">{unit.typeName}</DetailItem>
+        <DetailItem label="Make / model">{unit.makeModel}</DetailItem>
+      </DetailGroup>
+
+      <DetailGroup title="Consumption standard">
+        <DetailItem label="Measured by" emphasis>
+          {km ? "Distance (km)" : "Running hours"}
+        </DetailItem>
+        <DetailItem label="L/km standard">{dash(unit.lKmStd, 3)}</DetailItem>
+        <DetailItem label="L/hr standard">{dash(unit.lHrStd, 2)}</DetailItem>
+      </DetailGroup>
+
+      <DetailGroup title="Posting">
+        <DetailItem label="Assigned site">{unit.siteName}</DetailItem>
+        <DetailItem label="Status">{equipmentStatusStyles[unit.status].label}</DetailItem>
+      </DetailGroup>
+    </DetailPanel>
+  );
+}
+
+function UnitTableRow({ unit }: { unit: EquipmentRow }) {
+  const details = useDisclosure();
+  const km = unit.basis === "km";
+  return (
+    <>
+      <SelectableRow
+        id={unit.id}
+        className={`transition-colors hover:bg-slate-50/70 ${unit.status === "retired" ? "opacity-70" : ""}`}
+      >
+        <td className="px-5 py-4 sm:px-6">
+          <RowCheckbox id={unit.id} label={unit.code} />
+        </td>
+        <td className="px-3 py-4">
+          <span className="block font-medium text-slate-900">{unit.code}</span>
+          <span className="block text-sm text-slate-500">{unit.typeName}</span>
+        </td>
+        <td className="px-3 py-4 text-slate-500">{unit.siteName}</td>
+        <td className="px-3 py-4 text-right">
+          <span className="tabular-nums text-slate-700">{km ? dash(unit.lKmStd, 3) : dash(unit.lHrStd, 2)}</span>
+          <span className="ml-1 text-slate-400">{km ? "L/km" : "L/hr"}</span>
+        </td>
+        <td className="px-3 py-4 text-right">
+          <StatusPill {...equipmentStatusStyles[unit.status]} />
+        </td>
+        <td className="px-5 py-4 sm:px-6">
+          <div className="flex items-center justify-end gap-1">
+            <ExpandButton {...details.buttonProps} label={`details for ${unit.code}`} />
+            <EquipmentRowActions unit={unit} />
+          </div>
+        </td>
+      </SelectableRow>
+      {details.open && (
+        <tr>
+          <td colSpan={6} className="p-0">
+            <UnitDetails unit={unit} id={details.panelId} flush />
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
+
+function UnitCard({ unit }: { unit: EquipmentRow }) {
+  const details = useDisclosure();
+  const km = unit.basis === "km";
+  return (
+    <SelectableRow id={unit.id} as="li" className={unit.status === "retired" ? "opacity-70" : ""}>
+      <div className="px-5 py-4 sm:px-6">
+        <MobileRecordHeader
+          select={<RowCheckbox id={unit.id} label={unit.code} />}
+          title={unit.code}
+          subtitle={`${unit.typeName} · ${unit.siteName}`}
+          trailing={
+            <>
+              <StatusPill {...equipmentStatusStyles[unit.status]} />
+              <EquipmentRowActions unit={unit} />
+            </>
+          }
+        />
+        <div className="mt-2 flex items-center justify-between gap-3">
+          <span className="text-sm tabular-nums text-slate-500">
+            {km ? dash(unit.lKmStd, 3) : dash(unit.lHrStd, 2)} <span className="text-slate-400">{km ? "L/km" : "L/hr"}</span>
+          </span>
+          <ExpandButton {...details.buttonProps} label={`details for ${unit.code}`} variant="text" />
+        </div>
+      </div>
+      {details.open && <UnitDetails unit={unit} id={details.panelId} />}
+    </SelectableRow>
+  );
+}
 
 export default function EquipmentRegistryCard() {
   const query = useQuery(equipmentListQuery());
@@ -58,66 +164,28 @@ export default function EquipmentRegistryCard() {
       <SelectAllBar label="units" />
       <MobileList>
         {units.map((unit) => (
-          <SelectableRow key={unit.id} id={unit.id} as="li" className={`px-5 py-4 sm:px-6 ${unit.status === "retired" ? "opacity-70" : ""}`}>
-            <MobileRecordHeader
-              select={<RowCheckbox id={unit.id} label={unit.code} />}
-              title={<><span className="font-mono">{unit.code}</span> · {unit.typeName}</>}
-              subtitle={unit.makeModel}
-              trailing={
-                <>
-                  <StatusPill {...equipmentStatusStyles[unit.status]} />
-                  <EquipmentRowActions unit={unit} />
-                </>
-              }
-            />
-            <MobileFields>
-              <MobileField label="Site" className="col-span-2 sm:col-span-1">{unit.siteName}</MobileField>
-              <MobileField label="L/km std"><span className="tabular-nums">{dash(unit.lKmStd, 3)}</span></MobileField>
-              <MobileField label="L/hr std"><span className="tabular-nums">{dash(unit.lHrStd, 2)}</span></MobileField>
-            </MobileFields>
-          </SelectableRow>
+          <UnitCard key={unit.id} unit={unit} />
         ))}
       </MobileList>
-      <div className="hidden overflow-x-auto lg:block">
-        <table className="w-full min-w-215 border-collapse text-sm">
+      <div className="hidden lg:block">
+        <table className="w-full border-collapse text-[15px]">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/60 text-[11px] uppercase tracking-wider text-slate-400">
-              <th scope="col" className="w-10 px-5 py-2.5 text-left sm:px-6">
+            <tr className="border-b border-slate-100 bg-slate-50/60 text-xs uppercase tracking-wider text-slate-400">
+              <th scope="col" className="w-10 px-5 py-3 text-left sm:px-6">
                 <SelectAllCheckbox label="units" />
               </th>
-              <th scope="col" className="px-3 py-2.5 text-left font-semibold">Equipment ID</th>
-              <th scope="col" className="px-3 py-2.5 text-left font-semibold">Type</th>
-              <th scope="col" className="px-3 py-2.5 text-left font-semibold">Make / model</th>
-              <th scope="col" className="px-3 py-2.5 text-left font-semibold">Assigned site</th>
-              <th scope="col" className="px-3 py-2.5 text-right font-semibold">L/km std</th>
-              <th scope="col" className="px-3 py-2.5 text-right font-semibold">L/hr std</th>
-              <th scope="col" className="px-3 py-2.5 text-right font-semibold">Status</th>
-              <th scope="col" className="px-5 py-2.5 text-right font-semibold sm:px-6">Actions</th>
+              <th scope="col" className="px-3 py-3 text-left font-semibold">Equipment</th>
+              <th scope="col" className="px-3 py-3 text-left font-semibold">Assigned site</th>
+              <th scope="col" className="px-3 py-3 text-right font-semibold">Standard</th>
+              <th scope="col" className="px-3 py-3 text-right font-semibold">Status</th>
+              <th scope="col" className="w-24 px-5 py-3 text-right font-semibold sm:px-6">
+                <span className="sr-only">Details and actions</span>
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {units.map((unit) => (
-              <SelectableRow
-                key={unit.id}
-                id={unit.id}
-                className={`transition-colors hover:bg-slate-50/70 ${unit.status === "retired" ? "text-slate-400" : ""}`}
-              >
-                <td className="px-5 py-3.5 sm:px-6">
-                  <RowCheckbox id={unit.id} label={unit.code} />
-                </td>
-                <td className="px-3 py-3.5 font-mono text-sm font-semibold text-slate-900">{unit.code}</td>
-                <td className="px-3 py-3.5 text-slate-700">{unit.typeName}</td>
-                <td className="px-3 py-3.5 text-slate-500">{unit.makeModel}</td>
-                <td className="px-3 py-3.5 text-slate-500">{unit.siteName}</td>
-                <td className="px-3 py-3.5 text-right tabular-nums text-slate-700">{dash(unit.lKmStd, 3)}</td>
-                <td className="px-3 py-3.5 text-right tabular-nums text-slate-700">{dash(unit.lHrStd, 2)}</td>
-                <td className="px-3 py-3.5 text-right">
-                  <StatusPill {...equipmentStatusStyles[unit.status]} />
-                </td>
-                <td className="px-5 py-3.5 text-right sm:px-6">
-                  <EquipmentRowActions unit={unit} />
-                </td>
-              </SelectableRow>
+              <UnitTableRow key={unit.id} unit={unit} />
             ))}
           </tbody>
         </table>

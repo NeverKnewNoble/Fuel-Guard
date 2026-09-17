@@ -89,7 +89,7 @@ export default function AccountsCard({ currentUserId }: { currentUserId: string 
       <div className="hidden overflow-x-auto lg:block">
         <table className="w-full min-w-[960px] border-collapse text-sm">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/60 text-[11px] uppercase tracking-wider text-slate-400">
+            <tr className="border-b border-slate-100 bg-slate-50/60 text-xs uppercase tracking-wider text-slate-400">
               <th scope="col" className="w-10 px-5 py-2.5 text-left sm:px-6">
                 <SelectAllCheckbox label="accounts" />
               </th>
@@ -109,7 +109,7 @@ export default function AccountsCard({ currentUserId }: { currentUserId: string 
                 </td>
                 <td className="px-3 py-3.5">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold text-slate-600">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-600">
                       {initialsOf(account.name)}
                     </span>
                     <span className="min-w-0">

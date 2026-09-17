@@ -117,7 +117,7 @@ function AlertBadge({ role }: { role: AppUserRole }) {
       className="ml-auto inline-flex items-center gap-1.5"
       aria-label={`${unread} unread alert${unread === 1 ? "" : "s"}`}
     >
-      <span className="min-w-5 rounded-full bg-brand-600 px-1.5 py-0.5 text-center text-[11px] font-semibold leading-none tabular-nums text-white">
+      <span className="min-w-5 rounded-full bg-brand-600 px-1.5 py-0.5 text-center text-xs font-semibold leading-none tabular-nums text-white">
         {unread > 99 ? "99+" : unread}
       </span>
     </span>
@@ -132,7 +132,7 @@ function NavLinks({ role, onNavigate }: { role: AppUserRole; onNavigate?: () => 
     <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
       {navLinksFor(role).map((section) => (
         <div key={section.heading}>
-          <p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+          <p className="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
             {section.heading}
           </p>
           <ul className="mt-2 space-y-0.5">

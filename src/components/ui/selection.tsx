@@ -95,7 +95,7 @@ export function SelectAllBar({ label = "rows" }: { label?: string }) {
   return (
     <label className="flex cursor-pointer items-center gap-2 border-b border-slate-100 bg-slate-50/60 px-5 py-2.5 sm:px-6 lg:hidden">
       <SelectAllCheckbox label={label} />
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+      <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
         Select all
       </span>
     </label>
