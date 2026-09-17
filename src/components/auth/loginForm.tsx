@@ -140,7 +140,7 @@ export default function LoginForm({
 
           {/* Demo quick access */}
           <div className="mt-7 border-t border-slate-200 pt-5">
-            <p className="text-center text-[11px] font-medium uppercase tracking-wider text-slate-400">
+            <p className="text-center text-xs font-medium uppercase tracking-wider text-slate-400">
               Demo &mdash; Quick access
             </p>
             <div className="mt-3.5 grid grid-cols-1 gap-3 min-[360px]:grid-cols-2">

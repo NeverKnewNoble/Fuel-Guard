@@ -9,7 +9,14 @@ import ConfirmDialog from "@/components/modals/confirmDialog";
 import DataCard from "@/components/ui/dataCard";
 import EmptyState from "@/components/ui/emptyState";
 import ErrorState from "@/components/ui/errorState";
-import { MobileField, MobileFields, MobileList, MobileRecordHeader } from "@/components/ui/mobileList";
+import {
+  DetailGroup,
+  DetailItem,
+  DetailPanel,
+  ExpandButton,
+  useDisclosure,
+} from "@/components/ui/detailDisclosure";
+import { MobileList, MobileRecordHeader } from "@/components/ui/mobileList";
 import PageHeader from "@/components/ui/pageHeader";
 import {
   RowCheckbox,
@@ -24,9 +31,115 @@ import StatTile from "@/components/ui/statTile";
 import StatusPill from "@/components/ui/statusPill";
 import { useClosePeriod, useReopenPeriod } from "@/queries/monthlyMutations";
 import { monthlyReportQuery, reportingPeriodsQuery } from "@/queries/monthlyQueries";
+import type { MonthlyEquipmentRow } from "@/types/monthly";
 import { dash, formatVariance, varianceStatusStyles, varianceToneClass } from "@/utils/statusUtils";
 
 const TILE_GRID = "mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3";
+
+/** Everything the row doesn't show: usage on the unit's own basis, its standard, and what it cost. */
+function SummaryDetails({ row, id, flush = false }: { row: MonthlyEquipmentRow; id: string; flush?: boolean }) {
+  const perHour = row.basis === "hours";
+  const unit = perHour ? "L/hr" : "L/km";
+  const dp = perHour ? 2 : 3;
+  return (
+    <DetailPanel id={id} flush={flush}>
+      <DetailGroup title="Usage">
+        <DetailItem label={perHour ? "Total hours" : "Total km"} emphasis>
+          {(perHour ? row.hours : row.km)?.toLocaleString() ?? "—"}
+        </DetailItem>
+        <DetailItem label="Quantity issued">{row.qtyL.toLocaleString()} L</DetailItem>
+        <DetailItem label="Equipment type">{row.type}</DetailItem>
+      </DetailGroup>
+
+      <DetailGroup title="Against standard">
+        <DetailItem label={`Average (${unit})`}>{dash(perHour ? row.lHrAvg : row.lKmAvg, dp)}</DetailItem>
+        <DetailItem label={`Standard (${unit})`}>{dash(perHour ? row.lHrStd : row.lKmStd, dp)}</DetailItem>
+        <DetailItem label="Variance" emphasis>
+          <span className={varianceToneClass(row.varLHr ?? row.varLKm)}>{formatVariance(row.varLHr ?? row.varLKm)}</span>
+        </DetailItem>
+      </DetailGroup>
+
+      <DetailGroup title="Cost">
+        <DetailItem label="Fuel cost (GHS)" emphasis>
+          {row.costGhs.toLocaleString()}
+        </DetailItem>
+        <DetailItem label="Site">{row.site}</DetailItem>
+      </DetailGroup>
+    </DetailPanel>
+  );
+}
+
+function SummaryRow({ row }: { row: MonthlyEquipmentRow }) {
+  const details = useDisclosure();
+  const perHour = row.basis === "hours";
+  const variance = row.varLHr ?? row.varLKm;
+  return (
+    <>
+      <SelectableRow id={row.equipmentId} className="transition-colors hover:bg-slate-50/70">
+        <td className="px-5 py-4 sm:px-6">
+          <RowCheckbox id={row.equipmentId} label={row.equipmentCode} />
+        </td>
+        <td className="px-3 py-4">
+          <span className="block font-medium text-slate-900">{row.equipmentCode}</span>
+          <span className="block text-sm text-slate-500">{row.type}</span>
+        </td>
+        <td className="px-3 py-4 text-slate-500">{row.site}</td>
+        <td className="px-3 py-4 text-right font-semibold tabular-nums text-slate-900">{row.qtyL.toLocaleString()}</td>
+        <td className="px-3 py-4 text-right">
+          <span className="tabular-nums text-slate-700">{dash(perHour ? row.lHrAvg : row.lKmAvg, perHour ? 2 : 3)}</span>
+          <span className="ml-1 text-slate-400">{perHour ? "L/hr" : "L/km"}</span>
+        </td>
+        <td className={`px-3 py-4 text-right font-medium tabular-nums ${varianceToneClass(variance)}`}>
+          {formatVariance(variance)}
+        </td>
+        <td className="px-3 py-4 text-right">
+          <StatusPill {...varianceStatusStyles[row.status]} />
+        </td>
+        <td className="px-5 py-4 text-right sm:px-6">
+          <ExpandButton {...details.buttonProps} label={`details for ${row.equipmentCode}`} />
+        </td>
+      </SelectableRow>
+      {details.open && (
+        <tr>
+          <td colSpan={8} className="p-0">
+            <SummaryDetails row={row} id={details.panelId} flush />
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
+
+function SummaryCard({ row }: { row: MonthlyEquipmentRow }) {
+  const details = useDisclosure();
+  const perHour = row.basis === "hours";
+  const variance = row.varLHr ?? row.varLKm;
+  return (
+    <SelectableRow id={row.equipmentId} as="li">
+      <div className="px-5 py-4 sm:px-6">
+        <MobileRecordHeader
+          select={<RowCheckbox id={row.equipmentId} label={row.equipmentCode} />}
+          title={row.equipmentCode}
+          subtitle={`${row.type} · ${row.site}`}
+          trailing={<StatusPill {...varianceStatusStyles[row.status]} />}
+        />
+        <div className="mt-3 flex items-baseline gap-3">
+          <span className="text-2xl font-semibold tabular-nums text-slate-900">{row.qtyL.toLocaleString()}</span>
+          <span className="text-slate-400">L</span>
+          <span className={`ml-auto font-medium tabular-nums ${varianceToneClass(variance)}`}>{formatVariance(variance)}</span>
+        </div>
+        <div className="mt-1 flex items-center justify-between gap-3">
+          <span className="text-sm text-slate-500">
+            {dash(perHour ? row.lHrAvg : row.lKmAvg, perHour ? 2 : 3)}{" "}
+            <span className="text-slate-400">{perHour ? "L/hr" : "L/km"}</span>
+          </span>
+          <ExpandButton {...details.buttonProps} label={`details for ${row.equipmentCode}`} variant="text" />
+        </div>
+      </div>
+      {details.open && <SummaryDetails row={row} id={details.panelId} />}
+    </SelectableRow>
+  );
+}
 
 const exportHref = (periodId: string, equipmentIds: string[] = []) =>
   `/portal/monthly_summary/export?period=${encodeURIComponent(periodId)}${equipmentIds.map((id) => `&equipment=${encodeURIComponent(id)}`).join("")}`;
@@ -155,91 +268,32 @@ export default function MonthlySummaryView({ initialPeriodId }: { initialPeriodI
           >
             <SelectAllBar label="rows" />
             <MobileList>
-              {rows.map((row) => {
-                const status = varianceStatusStyles[row.status];
-                const variance = row.varLHr ?? row.varLKm;
-                const perHour = row.basis === "hours";
-                return (
-                  <SelectableRow key={row.equipmentId} id={row.equipmentId} as="li" className="px-5 py-4 sm:px-6">
-                    <MobileRecordHeader
-                      select={<RowCheckbox id={row.equipmentId} label={row.equipmentCode} />}
-                      title={<><span className="font-mono">{row.equipmentCode}</span> · {row.type}</>}
-                      subtitle={row.site}
-                      trailing={<StatusPill {...status} />}
-                    />
-                    <MobileFields>
-                      <MobileField label="Qty (L)"><span className="tabular-nums text-slate-900">{row.qtyL.toLocaleString()}</span></MobileField>
-                      <MobileField label="Cost (GHS)"><span className="tabular-nums text-slate-900">{row.costGhs.toLocaleString()}</span></MobileField>
-                      <MobileField label={perHour ? "Hours" : "Km"}>
-                        <span className="tabular-nums">{(perHour ? row.hours : row.km)?.toLocaleString() ?? "—"}</span>
-                      </MobileField>
-                      <MobileField label={`Avg / std (${perHour ? "L/hr" : "L/km"})`}>
-                        <span className="tabular-nums">
-                          {dash(perHour ? row.lHrAvg : row.lKmAvg, perHour ? 2 : 3)} / {dash(perHour ? row.lHrStd : row.lKmStd, perHour ? 2 : 3)}
-                        </span>
-                      </MobileField>
-                      <MobileField label="Variance">
-                        <span className={`font-medium tabular-nums ${varianceToneClass(variance)}`}>{formatVariance(variance)}</span>
-                      </MobileField>
-                    </MobileFields>
-                  </SelectableRow>
-                );
-              })}
+              {rows.map((row) => (
+                <SummaryCard key={row.equipmentId} row={row} />
+              ))}
             </MobileList>
-            <div className="hidden overflow-x-auto lg:block">
-              <table className="w-full min-w-260 border-collapse text-sm">
+            <div className="hidden lg:block">
+              <table className="w-full border-collapse text-[15px]">
                 <thead>
-                  <tr className="border-b border-slate-100 bg-slate-50/60 text-[11px] uppercase tracking-wider text-slate-400">
-                    <th scope="col" className="w-10 px-5 py-2.5 text-left sm:px-6">
+                  <tr className="border-b border-slate-100 bg-slate-50/60 text-xs uppercase tracking-wider text-slate-400">
+                    <th scope="col" className="w-10 px-5 py-3 text-left sm:px-6">
                       <SelectAllCheckbox label="rows" />
                     </th>
-                    <th scope="col" className="px-3 py-2.5 text-left font-semibold">Equipment</th>
-                    <th scope="col" className="px-3 py-2.5 text-left font-semibold">Type</th>
-                    <th scope="col" className="px-3 py-2.5 text-left font-semibold">Site</th>
-                    <th scope="col" className="px-3 py-2.5 text-right font-semibold">Qty (L)</th>
-                    <th scope="col" className="px-3 py-2.5 text-right font-semibold">Km</th>
-                    <th scope="col" className="px-3 py-2.5 text-right font-semibold">Hours</th>
-                    <th scope="col" className="px-3 py-2.5 text-right font-semibold">Consumption avg</th>
-                    <th scope="col" className="px-3 py-2.5 text-right font-semibold">Standard</th>
-                    <th scope="col" className="px-3 py-2.5 text-right font-semibold">Variance</th>
-                    <th scope="col" className="px-3 py-2.5 text-right font-semibold">Cost (GHS)</th>
-                    <th scope="col" className="px-5 py-2.5 text-right font-semibold sm:px-6">Status</th>
+                    <th scope="col" className="px-3 py-3 text-left font-semibold">Equipment</th>
+                    <th scope="col" className="px-3 py-3 text-left font-semibold">Site</th>
+                    <th scope="col" className="px-3 py-3 text-right font-semibold">Qty (L)</th>
+                    <th scope="col" className="px-3 py-3 text-right font-semibold">Consumption</th>
+                    <th scope="col" className="px-3 py-3 text-right font-semibold">Variance</th>
+                    <th scope="col" className="px-3 py-3 text-right font-semibold">Status</th>
+                    <th scope="col" className="w-14 px-5 py-3 text-right font-semibold sm:px-6">
+                      <span className="sr-only">Details</span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className={`divide-y divide-slate-100 ${report.isFetching ? "opacity-60 transition-opacity" : ""}`}>
-                  {rows.map((row) => {
-                    const status = varianceStatusStyles[row.status];
-                    const variance = row.varLHr ?? row.varLKm;
-                    const perHour = row.basis === "hours";
-                    return (
-                      <SelectableRow key={row.equipmentId} id={row.equipmentId} className="transition-colors hover:bg-slate-50/70">
-                        <td className="px-5 py-3.5 sm:px-6">
-                          <RowCheckbox id={row.equipmentId} label={row.equipmentCode} />
-                        </td>
-                        <td className="px-3 py-3.5 font-mono text-sm font-semibold text-slate-900">{row.equipmentCode}</td>
-                        <td className="px-3 py-3.5 text-slate-700">{row.type}</td>
-                        <td className="px-3 py-3.5 text-slate-500">{row.site}</td>
-                        <td className="px-3 py-3.5 text-right tabular-nums text-slate-900">{row.qtyL.toLocaleString()}</td>
-                        <td className="px-3 py-3.5 text-right tabular-nums text-slate-500">{row.km?.toLocaleString() ?? "—"}</td>
-                        <td className="px-3 py-3.5 text-right tabular-nums text-slate-500">{row.hours?.toLocaleString() ?? "—"}</td>
-                        <td className="px-3 py-3.5 text-right tabular-nums text-slate-700">
-                          {dash(perHour ? row.lHrAvg : row.lKmAvg, perHour ? 2 : 3)}
-                          <span className="ml-1 text-xs font-normal text-slate-400">{perHour ? "L/hr" : "L/km"}</span>
-                        </td>
-                        <td className="px-3 py-3.5 text-right tabular-nums text-slate-500">
-                          {dash(perHour ? row.lHrStd : row.lKmStd, perHour ? 2 : 3)}
-                          <span className="ml-1 text-xs font-normal text-slate-400">{perHour ? "L/hr" : "L/km"}</span>
-                        </td>
-                        <td className={`px-3 py-3.5 text-right font-medium tabular-nums ${varianceToneClass(variance)}`}>
-                          {formatVariance(variance)}
-                        </td>
-                        <td className="px-3 py-3.5 text-right tabular-nums text-slate-900">{row.costGhs.toLocaleString()}</td>
-                        <td className="px-5 py-3.5 text-right sm:px-6">
-                          <StatusPill {...status} />
-                        </td>
-                      </SelectableRow>
-                    );
-                  })}
+                  {rows.map((row) => (
+                    <SummaryRow key={row.equipmentId} row={row} />
+                  ))}
                 </tbody>
               </table>
             </div>

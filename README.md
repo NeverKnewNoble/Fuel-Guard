@@ -85,6 +85,11 @@ drizzle/            generated migrations — committed, applied by hand
 docs/               the long-form guides below
 ```
 
+Lists follow one rule: a row shows only what you scan by, and everything else waits behind the
+chevron at its right. `components/ui/detailDisclosure.tsx` has the pieces — `useDisclosure`,
+`ExpandButton`, and the `DetailPanel` / `DetailGroup` / `DetailItem` set that lays a record out as
+label-left, value-right. Reach for it before adding a ninth column to a table.
+
 **Reads** go page → API route → service → Drizzle, cached by TanStack Query for 25 minutes (the
 sidebar's unread-alert badge is the exception, at 30 seconds). **Writes** go through server actions
 that call the same services, report success or failure with a toast, and invalidate the queries they

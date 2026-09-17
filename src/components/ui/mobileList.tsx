@@ -47,7 +47,7 @@ export function MobileField({
 }) {
   return (
     <div className={`min-w-0 ${className}`}>
-      <dt className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{label}</dt>
+      <dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</dt>
       <dd className="mt-0.5 truncate text-sm text-slate-700">{children}</dd>
     </div>
   );

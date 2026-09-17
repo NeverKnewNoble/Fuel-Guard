@@ -6,9 +6,16 @@ import { useState } from "react";
 
 import { FuelEntryRowActions } from "@/components/fuelEntry/fuelEntryRowActions";
 import { NewFuelEntryButton } from "@/components/modals/triggers";
+import {
+  DetailGroup,
+  DetailItem,
+  DetailPanel,
+  ExpandButton,
+  useDisclosure,
+} from "@/components/ui/detailDisclosure";
 import EmptyState from "@/components/ui/emptyState";
 import ErrorState from "@/components/ui/errorState";
-import { MobileField, MobileFields, MobileList, MobileRecordHeader } from "@/components/ui/mobileList";
+import { MobileList, MobileRecordHeader } from "@/components/ui/mobileList";
 import {
   RowCheckbox,
   SelectAllCheckbox,
@@ -37,8 +44,10 @@ const num = (value: number | null, digits = 0) =>
   value === null ? "—" : value.toLocaleString("en-GB", { maximumFractionDigits: digits, minimumFractionDigits: digits });
 
 /** Consumption is only ever quoted on the basis the equipment is measured by. */
-const consumption = (entry: LogEntryRow) =>
-  entry.basis === "km" ? { value: entry.lPerKm, unit: "L/km", digits: 3 } : { value: entry.lPerHr, unit: "L/hr", digits: 2 };
+const consumptionOf = (entry: LogEntryRow) =>
+  entry.basis === "km"
+    ? { value: entry.lPerKm, unit: "L/km", digits: 3 }
+    : { value: entry.lPerHr, unit: "L/hr", digits: 2 };
 
 function StatusCell({ entry }: { entry: LogEntryRow }) {
   if (entry.voidedAt) {
@@ -56,6 +65,128 @@ function StatusCell({ entry }: { entry: LogEntryRow }) {
       <Icon className="h-3 w-3 shrink-0" aria-hidden />
       {status.shortLabel}
     </span>
+  );
+}
+
+/**
+ * Everything the row itself doesn't show. The meter readings follow the equipment's basis, so a
+ * truck shows kilometres and a dozer shows hours — never both, never empty columns.
+ */
+function EntryDetails({ entry, id, flush = false }: { entry: LogEntryRow; id: string; flush?: boolean }) {
+  const km = entry.basis === "km";
+  const rate = consumptionOf(entry);
+  return (
+    <DetailPanel id={id} flush={flush}>
+      <DetailGroup title={km ? "Odometer" : "Hour meter"}>
+        <DetailItem label="Reading start">{num(km ? entry.odometerStart : entry.hourMeterStart, 1)}</DetailItem>
+        <DetailItem label="Reading end">{num(km ? entry.odometerEnd : entry.hourMeterEnd, 1)}</DetailItem>
+        <DetailItem label={km ? "Total km done" : "Total hours done"} emphasis>
+          {num(km ? entry.totalKm : entry.totalHours, 1)}
+        </DetailItem>
+      </DetailGroup>
+
+      <DetailGroup title="Consumption">
+        <DetailItem label={rate.unit} emphasis>
+          {num(rate.value, rate.digits)}
+        </DetailItem>
+        <DetailItem label="Quantity issued">{entry.litres.toLocaleString()} L</DetailItem>
+        <DetailItem label="Equipment type">{entry.equipmentType}</DetailItem>
+      </DetailGroup>
+
+      <DetailGroup title="Record">
+        <DetailItem label="Location & activity">{entry.locationActivity || "—"}</DetailItem>
+        <DetailItem label="Site">{entry.siteName}</DetailItem>
+        <DetailItem label="Recorded by">{entry.recordedBy}</DetailItem>
+        <DetailItem label="Entry">{entry.code}</DetailItem>
+      </DetailGroup>
+    </DetailPanel>
+  );
+}
+
+/** A table row and, when open, the panel underneath it. */
+function EntryRow({ entry, isAdmin, columns }: { entry: LogEntryRow; isAdmin: boolean; columns: number }) {
+  const details = useDisclosure();
+  const rate = consumptionOf(entry);
+
+  return (
+    <>
+      <SelectableRow
+        id={entry.id}
+        className={`transition-colors hover:bg-slate-50/70 ${entry.voidedAt ? "opacity-70" : ""}`}
+      >
+        <td className="px-5 py-4 sm:px-6">
+          <RowCheckbox id={entry.id} label={entry.code} />
+        </td>
+        <td className="px-3 py-4 whitespace-nowrap tabular-nums text-slate-500">{formatDateTime(entry.dispensedAt)}</td>
+        <td className="px-3 py-4">
+          <span className={`block font-medium text-slate-900 ${entry.voidedAt ? "line-through" : ""}`}>
+            {entry.equipmentCode}
+          </span>
+          <span className="block text-sm text-slate-500">{entry.equipmentType}</span>
+        </td>
+        <td className="px-3 py-4 text-slate-700">{entry.operatorName}</td>
+        <td className="px-3 py-4 text-right">
+          <span className="font-semibold tabular-nums text-slate-900">{entry.litres.toLocaleString()}</span>
+          <span className="ml-1 text-slate-400">L</span>
+        </td>
+        <td className="px-3 py-4 text-right">
+          <span className="tabular-nums text-slate-700">{num(rate.value, rate.digits)}</span>
+          <span className="ml-1 text-slate-400">{rate.unit}</span>
+        </td>
+        <td className="px-3 py-4 text-right">
+          <StatusCell entry={entry} />
+        </td>
+        <td className="px-5 py-4 sm:px-6">
+          <div className="flex items-center justify-end gap-1">
+            <ExpandButton {...details.buttonProps} label={`details for ${entry.code}`} />
+            <FuelEntryRowActions entry={entry} isAdmin={isAdmin} />
+          </div>
+        </td>
+      </SelectableRow>
+      {details.open && (
+        <tr>
+          <td colSpan={columns} className="p-0">
+            <EntryDetails entry={entry} id={details.panelId} flush />
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
+
+/** The same record as a card, for screens too narrow for the table. */
+function EntryCard({ entry, isAdmin }: { entry: LogEntryRow; isAdmin: boolean }) {
+  const details = useDisclosure();
+  const rate = consumptionOf(entry);
+
+  return (
+    <SelectableRow id={entry.id} as="li" className={entry.voidedAt ? "opacity-70" : ""}>
+      <div className="px-5 py-4 sm:px-6">
+        <MobileRecordHeader
+          select={<RowCheckbox id={entry.id} label={entry.code} />}
+          title={<span className={entry.voidedAt ? "line-through" : ""}>{entry.equipmentCode}</span>}
+          subtitle={`${entry.operatorName} · ${entry.equipmentType}`}
+          trailing={
+            <>
+              <StatusCell entry={entry} />
+              <FuelEntryRowActions entry={entry} isAdmin={isAdmin} />
+            </>
+          }
+        />
+        <div className="mt-3 flex items-baseline gap-3">
+          <span className="text-2xl font-semibold tabular-nums text-slate-900">{entry.litres.toLocaleString()}</span>
+          <span className="text-slate-400">L</span>
+          <span className="ml-auto text-sm tabular-nums text-slate-500">{formatDateTime(entry.dispensedAt)}</span>
+        </div>
+        <div className="mt-1 flex items-center justify-between gap-3">
+          <span className="text-sm text-slate-500">
+            {num(rate.value, rate.digits)} <span className="text-slate-400">{rate.unit}</span>
+          </span>
+          <ExpandButton {...details.buttonProps} label={`details for ${entry.code}`} variant="text" />
+        </div>
+      </div>
+      {details.open && <EntryDetails entry={entry} id={details.panelId} />}
+    </SelectableRow>
   );
 }
 
@@ -77,6 +208,8 @@ export default function FuelEntryList({ isAdmin }: { isAdmin: boolean }) {
     { key: "watch", label: "Watch", count: counts?.watch },
     { key: "locked", label: "Locked", count: counts?.locked },
   ];
+
+  const COLUMNS = 8;
 
   return (
     <>
@@ -102,7 +235,7 @@ export default function FuelEntryList({ isAdmin }: { isAdmin: boolean }) {
               >
                 {tab.label}
                 <span
-                  className={`rounded-full px-1.5 py-0.5 text-[11px] tabular-nums ${
+                  className={`rounded-full px-1.5 py-0.5 text-xs tabular-nums ${
                     isActive ? "bg-brand-100 text-brand-700" : "bg-slate-100 text-slate-500"
                   }`}
                 >
@@ -120,11 +253,11 @@ export default function FuelEntryList({ isAdmin }: { isAdmin: boolean }) {
         <section className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
           <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-5 py-4 sm:px-6">
             <div>
-              <h2 className="text-base font-semibold text-slate-900">{isAdmin ? "Daily fuel log" : "My fuel log"}</h2>
+              <h2 className="text-lg font-semibold text-slate-900">{isAdmin ? "Daily fuel log" : "My fuel log"}</h2>
               <p className="mt-1 text-sm text-slate-500">
                 {isAdmin
-                  ? "Every fill recorded across all sites, with meter readings and consumption. Corrections need your approval."
-                  : "Your recorded fills, with meter readings and consumption. Corrections require administrator approval."}
+                  ? "Every fill recorded across all sites. Open a row for its meter readings."
+                  : "Your recorded fills. Open a row for its meter readings."}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -143,7 +276,7 @@ export default function FuelEntryList({ isAdmin }: { isAdmin: boolean }) {
               {query.isSuccess && entries.length > 0 && (
                 <a
                   href={exportHref(filter, [])}
-                  className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
                 >
                   Export log
                 </a>
@@ -173,143 +306,34 @@ export default function FuelEntryList({ isAdmin }: { isAdmin: boolean }) {
           ) : (
             <>
               <MobileList>
-                {entries.map((entry) => {
-                  const rate = consumption(entry);
-                  return (
-                    <SelectableRow
-                      key={entry.id}
-                      id={entry.id}
-                      as="li"
-                      className={`px-5 py-4 sm:px-6 ${entry.voidedAt ? "opacity-70" : ""}`}
-                    >
-                      <MobileRecordHeader
-                        select={<RowCheckbox id={entry.id} label={entry.code} />}
-                        title={
-                          <>
-                            <span className={`font-mono ${entry.voidedAt ? "line-through" : ""}`}>{entry.equipmentCode}</span> ·{" "}
-                            {entry.equipmentType}
-                          </>
-                        }
-                        subtitle={`${entry.operatorName} · ${entry.siteName}`}
-                        trailing={
-                          <>
-                            <StatusCell entry={entry} />
-                            <FuelEntryRowActions entry={entry} isAdmin={isAdmin} />
-                          </>
-                        }
-                      />
-                      <MobileFields>
-                        <MobileField label="Qty (L)">
-                          <span className="font-semibold tabular-nums text-slate-900">{entry.litres.toLocaleString()}</span>
-                        </MobileField>
-                        <MobileField label={entry.basis === "km" ? "Total km" : "Total hours"}>
-                          <span className="tabular-nums">{num(entry.basis === "km" ? entry.totalKm : entry.totalHours, 1)}</span>
-                        </MobileField>
-                        <MobileField label={rate.unit}>
-                          <span className="tabular-nums">{num(rate.value, rate.digits)}</span>
-                        </MobileField>
-                        <MobileField label={entry.basis === "km" ? "ODM start → end" : "HM start → end"}>
-                          <span className="tabular-nums">
-                            {entry.basis === "km"
-                              ? `${num(entry.odometerStart, 1)} → ${num(entry.odometerEnd, 1)}`
-                              : `${num(entry.hourMeterStart, 1)} → ${num(entry.hourMeterEnd, 1)}`}
-                          </span>
-                        </MobileField>
-                        <MobileField label="Location & activity" className="col-span-2 sm:col-span-1">
-                          {entry.locationActivity || "—"}
-                        </MobileField>
-                        <MobileField label="Logged">
-                          <span className="font-mono text-xs tabular-nums">{formatDateTime(entry.dispensedAt)}</span>
-                        </MobileField>
-                      </MobileFields>
-                      <p className="mt-2 text-xs text-slate-400">Recorded by {entry.recordedBy}</p>
-                    </SelectableRow>
-                  );
-                })}
+                {entries.map((entry) => (
+                  <EntryCard key={entry.id} entry={entry} isAdmin={isAdmin} />
+                ))}
               </MobileList>
 
-              {/* The register itself: the client's sheet, column for column. Scrolls sideways, never the page. */}
-              <div className="hidden overflow-x-auto lg:block">
-                <table className="w-full min-w-[80rem] border-collapse text-sm">
+              {/* Six columns you scan by; the meter readings and the rest live behind each row's chevron. */}
+              <div className="hidden lg:block">
+                <table className="w-full border-collapse text-[15px]">
                   <thead>
-                    <tr className="border-b border-slate-100 bg-slate-50/60 text-[11px] uppercase tracking-wider text-slate-400">
-                      <th scope="col" className="w-10 px-5 py-2.5 text-left sm:px-6">
+                    <tr className="border-b border-slate-100 bg-slate-50/60 text-xs uppercase tracking-wider text-slate-400">
+                      <th scope="col" className="w-10 px-5 py-3 text-left sm:px-6">
                         <SelectAllCheckbox label="entries" />
                       </th>
-                      <th scope="col" className="px-3 py-2.5 text-left font-semibold">Date</th>
-                      <th scope="col" className="px-3 py-2.5 text-left font-semibold">Equipment</th>
-                      <th scope="col" className="px-3 py-2.5 text-left font-semibold">Driver / operator</th>
-                      <th scope="col" className="px-3 py-2.5 text-right font-semibold">Qty (L)</th>
-                      <th scope="col" className="px-3 py-2.5 text-right font-semibold">Meter start</th>
-                      <th scope="col" className="px-3 py-2.5 text-right font-semibold">Meter end</th>
-                      <th scope="col" className="px-3 py-2.5 text-right font-semibold">Total</th>
-                      <th scope="col" className="px-3 py-2.5 text-right font-semibold">Consumption</th>
-                      <th scope="col" className="px-3 py-2.5 text-left font-semibold">Location &amp; activity</th>
-                      <th scope="col" className="px-3 py-2.5 text-right font-semibold">Status</th>
-                      <th scope="col" className="w-12 px-5 py-2.5 text-right font-semibold sm:px-6">
-                        <span className="sr-only">Actions</span>
+                      <th scope="col" className="px-3 py-3 text-left font-semibold">Date</th>
+                      <th scope="col" className="px-3 py-3 text-left font-semibold">Equipment</th>
+                      <th scope="col" className="px-3 py-3 text-left font-semibold">Driver / operator</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">Quantity</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">Consumption</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">Status</th>
+                      <th scope="col" className="w-24 px-5 py-3 text-right font-semibold sm:px-6">
+                        <span className="sr-only">Details and actions</span>
                       </th>
                     </tr>
                   </thead>
                   <tbody className={`divide-y divide-slate-100 ${query.isFetching ? "opacity-60 transition-opacity" : ""}`}>
-                    {entries.map((entry) => {
-                      const km = entry.basis === "km";
-                      const rate = consumption(entry);
-                      return (
-                        <SelectableRow
-                          key={entry.id}
-                          id={entry.id}
-                          className={`transition-colors hover:bg-slate-50/70 ${entry.voidedAt ? "opacity-70" : ""}`}
-                        >
-                          <td className="px-5 py-3.5 sm:px-6">
-                            <RowCheckbox id={entry.id} label={entry.code} />
-                          </td>
-                          <td className="px-3 py-3.5 font-mono text-xs tabular-nums whitespace-nowrap text-slate-500">
-                            {formatDateTime(entry.dispensedAt)}
-                          </td>
-                          <td className="px-3 py-3.5">
-                            <span className={`block font-mono text-sm font-semibold text-slate-900 ${entry.voidedAt ? "line-through" : ""}`}>
-                              {entry.equipmentCode}
-                            </span>
-                            <span className="block text-xs text-slate-500">{entry.equipmentType}</span>
-                          </td>
-                          <td className="px-3 py-3.5">
-                            <span className="block text-slate-700">{entry.operatorName}</span>
-                            <span className="block text-xs text-slate-400">{entry.siteName}</span>
-                          </td>
-                          <td className="px-3 py-3.5 text-right font-semibold tabular-nums text-slate-900">
-                            {entry.litres.toLocaleString()}
-                          </td>
-                          <td className="px-3 py-3.5 text-right tabular-nums text-slate-500">
-                            {num(km ? entry.odometerStart : entry.hourMeterStart, 1)}
-                            <span className="ml-1 text-xs font-normal text-slate-400">{km ? "km" : "hr"}</span>
-                          </td>
-                          <td className="px-3 py-3.5 text-right tabular-nums text-slate-500">
-                            {num(km ? entry.odometerEnd : entry.hourMeterEnd, 1)}
-                            <span className="ml-1 text-xs font-normal text-slate-400">{km ? "km" : "hr"}</span>
-                          </td>
-                          <td className="px-3 py-3.5 text-right tabular-nums text-slate-700">
-                            {num(km ? entry.totalKm : entry.totalHours, 1)}
-                            <span className="ml-1 text-xs font-normal text-slate-400">{km ? "km" : "hrs"}</span>
-                          </td>
-                          <td className="px-3 py-3.5 text-right tabular-nums text-slate-700">
-                            {num(rate.value, rate.digits)}
-                            <span className="ml-1 text-xs font-normal text-slate-400">{rate.unit}</span>
-                          </td>
-                          <td className="max-w-56 px-3 py-3.5 text-slate-600">
-                            <span className="block truncate" title={entry.locationActivity || undefined}>
-                              {entry.locationActivity || "—"}
-                            </span>
-                          </td>
-                          <td className="px-3 py-3.5 text-right">
-                            <StatusCell entry={entry} />
-                          </td>
-                          <td className="px-5 py-3.5 text-right sm:px-6">
-                            <FuelEntryRowActions entry={entry} isAdmin={isAdmin} />
-                          </td>
-                        </SelectableRow>
-                      );
-                    })}
+                    {entries.map((entry) => (
+                      <EntryRow key={entry.id} entry={entry} isAdmin={isAdmin} columns={COLUMNS} />
+                    ))}
                   </tbody>
                 </table>
               </div>

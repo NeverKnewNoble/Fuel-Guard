@@ -59,7 +59,7 @@ export default function PendingCorrectionsCard() {
               <li key={row.id} className="px-5 py-4 sm:px-6">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-mono text-sm font-semibold text-slate-900">{row.entryCode}</span>
-                  <span className="inline-flex rounded-md bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] text-slate-600">{row.equipmentCode}</span>
+                  <span className="inline-flex rounded-md bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-600">{row.equipmentCode}</span>
                   <span className="ml-auto font-mono text-xs tabular-nums text-slate-500">{formatDateTime(row.createdAt)}</span>
                 </div>
 
