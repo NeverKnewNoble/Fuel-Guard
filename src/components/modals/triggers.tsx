@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Plus, UserPlus } from "lucide-react";
+import { ArrowLeftRight, Pencil, Plus, UserPlus } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import CreateUserModal from "@/components/modals/createUserModal";
@@ -10,6 +10,7 @@ import EquipmentTypeModal from "@/components/modals/equipmentTypeModal";
 import NewFuelEntryModal from "@/components/modals/newFuelEntryModal";
 import RecordIntakeModal from "@/components/modals/recordIntakeModal";
 import TankFormModal from "@/components/modals/tankFormModal";
+import TransferFuelModal from "@/components/modals/transferFuelModal";
 import type { AlertThreshold } from "@/types/standards";
 
 const primary =
@@ -56,13 +57,24 @@ export function AddEquipmentButton() {
   );
 }
 
-export function AddTankerButton() {
+export function AddTankButton() {
   return (
     <Trigger
-      label="Add Tanker"
+      label="Add Tank"
       variant="secondary"
       icon={<Plus className="h-4 w-4" aria-hidden />}
       render={(open, close) => <TankFormModal open={open} onClose={close} />}
+    />
+  );
+}
+
+export function TransferFuelButton() {
+  return (
+    <Trigger
+      label="Transfer Fuel"
+      variant="secondary"
+      icon={<ArrowLeftRight className="h-4 w-4" aria-hidden />}
+      render={(open, close) => <TransferFuelModal open={open} onClose={close} />}
     />
   );
 }

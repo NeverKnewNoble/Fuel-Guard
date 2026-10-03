@@ -2,7 +2,7 @@
 
 import { Fuel } from "lucide-react";
 
-import { TankRowActions } from "@/components/tankers/tankRowActions";
+import { TankRowActions } from "@/components/tanks/tankRowActions";
 import {
   DetailGroup,
   DetailItem,
@@ -116,7 +116,7 @@ export default function TankCard({ tank }: { tank: TankCardData }) {
             <DetailItem label="Last refill">{formatShortDateTime(tank.lastRefillAt, "None yet")}</DetailItem>
           </DetailGroup>
 
-          <DetailGroup title="Tanker">
+          <DetailGroup title="Tank">
             <DetailItem label="Code">{tank.code}</DetailItem>
             <DetailItem label="Site">{tank.siteName}</DetailItem>
           </DetailGroup>

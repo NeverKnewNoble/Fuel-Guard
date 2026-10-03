@@ -49,7 +49,7 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
 
   const header = (
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <h2 className="text-base font-semibold text-slate-900">Fuel tankers</h2>
+      <h2 className="text-base font-semibold text-slate-900">Fuel tanks</h2>
       <p className="text-sm text-slate-500">
         {totalAvailable.toLocaleString()} L available across {tanks.length} {tanks.length === 1 ? "tank" : "tanks"}
       </p>
@@ -64,8 +64,8 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
           <EmptyState
             bordered
             icon={Fuel}
-            title="No tankers yet"
-            description="Add a tanker with its capacity and opening level to start tracking stock."
+            title="No tanks yet"
+            description="Add a tank with its capacity and opening level to start tracking stock."
             action={emptyAction}
           />
         </div>
@@ -118,7 +118,7 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
         {!atStart && (
           <button
             type="button"
-            aria-label="Scroll tankers left"
+            aria-label="Scroll tanks left"
             onClick={() => nudge(-1)}
             className={`${arrowClass} left-2`}
           >
@@ -128,7 +128,7 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
         {!atEnd && (
           <button
             type="button"
-            aria-label="Scroll tankers right"
+            aria-label="Scroll tanks right"
             onClick={() => nudge(1)}
             className={`${arrowClass} right-2`}
           >

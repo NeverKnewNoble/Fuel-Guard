@@ -4,7 +4,7 @@ export type TankLevel = "healthy" | "low" | "critical";
 
 export type TankKind = "bulk" | "mobile_bowser" | "day_tank";
 
-/** Tankers → tank cards. */
+/** Tanks → tank cards. */
 export type TankCardData = {
   id: string;
   code: string;
@@ -12,7 +12,7 @@ export type TankCardData = {
   siteId: string;
   siteName: string;
   capacityL: number;
-  /** Running level: the last dip, plus deliveries and minus fuel issued since it. */
+  /** Running level: the last dip, plus deliveries and transfers in, minus fuel issued and transferred out since it. */
   currentL: number;
   fillPct: number;
   /** The last dip itself, `null` when the tank has never been dipped. */
@@ -26,7 +26,7 @@ export type TankCardData = {
 
 export type TankTotals = { totalAvailableL: number; tankCount: number };
 
-/** Fuel entry & intake tanker selects. */
+/** Fuel entry & intake tank selects. */
 export type TankOption = {
   id: string;
   code: string;
@@ -85,8 +85,27 @@ export type CreateIntakeInput = {
   receivedById: string;
 };
 
-/** Everything about a delivery that can be corrected. The tanker it went into can't change — void it and record another. */
+/** Everything about a delivery that can be corrected. The tank it went into can't change — void it and record another. */
 export type UpdateIntakeInput = Omit<CreateIntakeInput, "tankId">;
+
+export type TransferRow = {
+  id: string;
+  code: string;
+  fromTankId: string;
+  fromTankName: string;
+  toTankId: string;
+  toTankName: string;
+  litres: number;
+  note: string | null;
+  transferredBy: string;
+  transferredAt: Date;
+  /** Set when the transfer was recorded in error: kept in the log, ignored by stock. */
+  voidedAt: Date | null;
+  voidedBy: string | null;
+  voidReason: string | null;
+};
+
+export type CreateTransferInput = { fromTankId: string; toTankId: string; litres: number; transferredAt: Date; note?: string };
 
 export type RecordDipInput = { tankId: string; measuredL: number; measuredAt: Date; note?: string };
 
@@ -99,6 +118,8 @@ export type ReconciliationRow = {
   openingL: number;
   intakeL: number;
   issuedL: number;
+  transferInL: number;
+  transferOutL: number;
   expectedL: number;
   measuredL: number | null;
   /** measured − expected; negative = unexplained loss. */

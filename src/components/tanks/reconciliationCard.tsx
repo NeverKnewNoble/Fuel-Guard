@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { CircleCheck, Lock, Scale, TriangleAlert } from "lucide-react";
 
-import { TankRowActions } from "@/components/tankers/tankRowActions";
+import { TankRowActions } from "@/components/tanks/tankRowActions";
 import DataCard from "@/components/ui/dataCard";
 import EmptyState from "@/components/ui/emptyState";
 import ErrorState from "@/components/ui/errorState";
@@ -30,7 +30,7 @@ import { varianceTone } from "@/utils/tankUtils";
 
 const litres = (n: number) => n.toLocaleString();
 
-/** Measured level, or a prompt when the tanker hasn't been dipped this period. */
+/** Measured level, or a prompt when the tank hasn't been dipped this period. */
 function Measured({ row }: { row: ReconciliationRow }) {
   if (row.measuredL === null) return <span className="font-medium text-amber-700">No dip</span>;
   return <span className="font-medium tabular-nums text-slate-900">{litres(row.measuredL)}</span>;
@@ -47,13 +47,15 @@ function Variance({ row }: { row: ReconciliationRow }) {
   );
 }
 
-/** The arithmetic behind the expected figure, spelled out: opening + intake − issued. */
+/** The arithmetic behind the expected figure, spelled out: opening + intake ± transfers − issued. */
 function ReconciliationDetails({ row, id, flush = false }: { row: ReconciliationRow; id: string; flush?: boolean }) {
   return (
     <DetailPanel id={id} flush={flush}>
       <DetailGroup title="Movement this period">
         <DetailItem label="Opening balance">{litres(row.openingL)} L</DetailItem>
         <DetailItem label="Received (intake)">{row.intakeL ? `+${litres(row.intakeL)} L` : "—"}</DetailItem>
+        <DetailItem label="Transferred in">{row.transferInL ? `+${litres(row.transferInL)} L` : "—"}</DetailItem>
+        <DetailItem label="Transferred out">{row.transferOutL ? `−${litres(row.transferOutL)} L` : "—"}</DetailItem>
         <DetailItem label="Issued to equipment">{row.issuedL ? `−${litres(row.issuedL)} L` : "—"}</DetailItem>
         <DetailItem label="Expected balance" emphasis>
           {litres(row.expectedL)} L
@@ -69,7 +71,7 @@ function ReconciliationDetails({ row, id, flush = false }: { row: Reconciliation
         </DetailItem>
       </DetailGroup>
 
-      <DetailGroup title="Tanker">
+      <DetailGroup title="Tank">
         <DetailItem label="Code">{row.tankCode}</DetailItem>
         <DetailItem label="Name">{row.name}</DetailItem>
       </DetailGroup>
@@ -159,7 +161,7 @@ export default function ReconciliationCard() {
       <EmptyState
         icon={Scale}
         title="Nothing to reconcile yet"
-        description="Add a tanker with its opening level. Its expected and measured stock will be compared here."
+        description="Add a tank with its opening level. Its expected and measured stock will be compared here."
       />
     )
   );
@@ -168,12 +170,12 @@ export default function ReconciliationCard() {
     <SelectionProvider ids={rows.map((r) => r.tankId)}>
     <DataCard
       title={report ? `Stock reconciliation — ${report.period.label}` : "Stock reconciliation"}
-      description="Opening + intake − issued = expected. The gap against the measured dip is unexplained loss."
+      description="Opening + intake ± transfers − issued = expected. The gap against the measured dip is unexplained loss."
       flush
       action={
         query.isSuccess && (
           <div className="flex flex-wrap items-center gap-2">
-            <SelectionBar noun="tanker" actions={["export"]} />
+            <SelectionBar noun="tank" actions={["export"]} />
             {report!.period.status === "closed" && (
               <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-600">
                 <Lock className="h-3 w-3" aria-hidden />
@@ -197,7 +199,7 @@ export default function ReconciliationCard() {
       }
       emptyState={placeholder}
     >
-      <SelectAllBar label="tankers" />
+      <SelectAllBar label="tanks" />
       <MobileList>
         {rows.map((row) => (
           <ReconciliationCardRow key={row.tankId} row={row} />
@@ -208,9 +210,9 @@ export default function ReconciliationCard() {
           <thead>
             <tr className="border-b border-slate-100 bg-slate-50/60 text-xs uppercase tracking-wider text-slate-400">
               <th scope="col" className="w-10 px-5 py-3 text-left sm:px-6">
-                <SelectAllCheckbox label="tankers" />
+                <SelectAllCheckbox label="tanks" />
               </th>
-              <th scope="col" className="px-3 py-3 text-left font-semibold">Tanker</th>
+              <th scope="col" className="px-3 py-3 text-left font-semibold">Tank</th>
               <th scope="col" className="px-3 py-3 text-right font-semibold">Expected</th>
               <th scope="col" className="px-3 py-3 text-right font-semibold">Measured</th>
               <th scope="col" className="px-3 py-3 text-right font-semibold">Variance</th>

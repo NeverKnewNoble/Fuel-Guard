@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Ban, Truck } from "lucide-react";
 
 import { RecordIntakeButton } from "@/components/modals/triggers";
-import { IntakeRowActions } from "@/components/tankers/intakeRowActions";
+import { IntakeRowActions } from "@/components/tanks/intakeRowActions";
 import DataCard from "@/components/ui/dataCard";
 import EmptyState from "@/components/ui/emptyState";
 import ErrorState from "@/components/ui/errorState";
@@ -47,7 +47,7 @@ function IntakeDetails({ intake, id, flush = false }: { intake: IntakeRow; id: s
       <DetailGroup title="Delivery">
         <DetailItem label="Intake">{intake.code}</DetailItem>
         <DetailItem label="Delivery note">{intake.deliveryNote}</DetailItem>
-        <DetailItem label="Tanker">{intake.tankName}</DetailItem>
+        <DetailItem label="Tank">{intake.tankName}</DetailItem>
       </DetailGroup>
 
       <DetailGroup title="Cost">
@@ -153,7 +153,7 @@ export default function IntakeLogCard({ currentUserId }: { currentUserId: string
       <EmptyState
         icon={Truck}
         title="No deliveries recorded"
-        description="Record each delivery taken into a tanker, with its supplier and delivery note."
+        description="Record each delivery taken into a tank, with its supplier and delivery note."
         action={(tanks.data?.length ?? 0) > 0 && <RecordIntakeButton currentUserId={currentUserId} />}
       />
     )
@@ -163,7 +163,7 @@ export default function IntakeLogCard({ currentUserId }: { currentUserId: string
     <SelectionProvider ids={intakes.map((i) => i.id)}>
     <DataCard
       title="Intake log"
-      description="The 50 most recent deliveries received into a tanker, with supplier and delivery note."
+      description="The 50 most recent deliveries received into a tank, with supplier and delivery note."
       flush
       action={query.isSuccess && <SelectionBar noun="intake" actions={["export"]} />}
       emptyState={placeholder}
@@ -182,7 +182,7 @@ export default function IntakeLogCard({ currentUserId }: { currentUserId: string
                 <SelectAllCheckbox label="intakes" />
               </th>
               <th scope="col" className="px-3 py-3 text-left font-semibold">Received</th>
-              <th scope="col" className="px-3 py-3 text-left font-semibold">Tanker / supplier</th>
+              <th scope="col" className="px-3 py-3 text-left font-semibold">Tank / supplier</th>
               <th scope="col" className="px-3 py-3 text-right font-semibold">Litres</th>
               <th scope="col" className="px-3 py-3 text-right font-semibold">Cost</th>
               <th scope="col" className="w-20 px-3 py-3 text-right font-semibold">

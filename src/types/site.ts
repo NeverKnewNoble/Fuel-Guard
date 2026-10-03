@@ -13,7 +13,7 @@ export type SiteUsageRow = {
   archivedAt: Date | null;
   /** Units that aren't retired. */
   equipmentCount: number;
-  /** Tankers that aren't archived. */
+  /** Tanks that aren't archived. */
   tankCount: number;
 };
 

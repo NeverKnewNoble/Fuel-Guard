@@ -268,7 +268,7 @@ export class FuelEntryService {
       FuelEntryService.loadDetectionInputs(unit, input.dispensedAt, null),
     ]);
 
-    if (!tank) throwIfInvalid({ tankId: "Pick a tanker" });
+    if (!tank) throwIfInvalid({ tankId: "Pick a tank" });
     const capacityL = Number(tank.capacityL);
     if (input.litres > capacityL) throwIfInvalid({ litres: `More than ${tank.name} holds (${formatLitres(capacityL)} L).` });
     if (!operator || !operator.isActive) throwIfInvalid({ operatorId: "Pick an active driver or operator" });

@@ -58,7 +58,7 @@ export function IntakeRowActions({ intake }: { intake: IntakeRow }) {
         pending={setVoided.isPending}
       >
         <p className="rounded-xl bg-slate-50 p-3.5 text-sm text-slate-600">
-          It stays in the intake log, marked void, but stops counting towards the tanker&apos;s level, the month&apos;s
+          It stays in the intake log, marked void, but stops counting towards the tank&apos;s level, the month&apos;s
           reconciliation and the price fuel is costed at. You can restore it later.
         </p>
       </VoidRecordModal>

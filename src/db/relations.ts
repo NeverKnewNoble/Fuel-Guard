@@ -22,6 +22,8 @@ export const relations = defineRelations(schema, (r) => ({
     recordedFuelEntries: r.many.fuelEntries(),
     receivedIntakes: r.many.tankIntakes(),
     voidedIntakes: r.many.tankIntakes({ alias: "voidedIntakes" }),
+    tankTransfers: r.many.tankTransfers({ alias: "transferredBy" }),
+    voidedTransfers: r.many.tankTransfers({ alias: "voidedTransfers" }),
     voidedFuelEntries: r.many.fuelEntries({ alias: "voidedEntries" }),
     tankDips: r.many.tankDips(),
     requestedCorrections: r.many.fuelEntryCorrections({ alias: "requestedBy" }),
@@ -59,6 +61,8 @@ export const relations = defineRelations(schema, (r) => ({
   tanks: {
     site: r.one.sites({ from: r.tanks.siteId, to: r.sites.id, optional: false }),
     intakes: r.many.tankIntakes(),
+    transfersOut: r.many.tankTransfers({ alias: "fromTank" }),
+    transfersIn: r.many.tankTransfers({ alias: "toTank" }),
     dips: r.many.tankDips(),
     periodBalances: r.many.tankPeriodBalances(),
     fuelEntries: r.many.fuelEntries(),
@@ -73,6 +77,13 @@ export const relations = defineRelations(schema, (r) => ({
     supplier: r.one.suppliers({ from: r.tankIntakes.supplierId, to: r.suppliers.id, optional: false }),
     receiver: r.one.users({ from: r.tankIntakes.receivedBy, to: r.users.id, optional: false }),
     voider: r.one.users({ from: r.tankIntakes.voidedBy, to: r.users.id, alias: "voidedIntakes" }),
+  },
+
+  tankTransfers: {
+    fromTank: r.one.tanks({ from: r.tankTransfers.fromTankId, to: r.tanks.id, alias: "fromTank", optional: false }),
+    toTank: r.one.tanks({ from: r.tankTransfers.toTankId, to: r.tanks.id, alias: "toTank", optional: false }),
+    transferrer: r.one.users({ from: r.tankTransfers.transferredBy, to: r.users.id, alias: "transferredBy", optional: false }),
+    voider: r.one.users({ from: r.tankTransfers.voidedBy, to: r.users.id, alias: "voidedTransfers" }),
   },
 
   tankDips: {

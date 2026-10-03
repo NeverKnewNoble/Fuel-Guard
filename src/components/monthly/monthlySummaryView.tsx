@@ -323,7 +323,7 @@ export default function MonthlySummaryView({ initialPeriodId }: { initialPeriodI
         <p className="rounded-xl bg-slate-50 p-3.5 text-sm text-slate-600">
           {closed
             ? "Fuel entries and deliveries dated in this month can be recorded again. Next month's opening balances stay as they are until you close this month again."
-            : "Every tanker needs a closing dip first. Closing freezes each tanker's measured level as this month's closing balance and next month's opening balance, and blocks new entries dated in this month."}
+            : "Every tank needs a closing dip first. Closing freezes each tank's measured level as this month's closing balance and next month's opening balance, and blocks new entries dated in this month."}
         </p>
       </ConfirmDialog>
     </>

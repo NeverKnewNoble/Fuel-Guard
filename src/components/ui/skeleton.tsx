@@ -217,7 +217,7 @@ function TilesBody() {
   );
 }
 
-/** Matches the Tankers page's "Fuel tankers" row of `TankCard`s. */
+/** Matches the Tanks page's "Fuel tanks" row of `TankCard`s. */
 export function TankCardsSkeleton({ count = 4 }: { count?: number }) {
   return (
     <div>

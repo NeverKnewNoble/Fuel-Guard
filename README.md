@@ -2,10 +2,10 @@
 
 A fuel tracking and theft-detection portal for construction fleets.
 
-Every litre issued from a site tanker is logged against the equipment that took it, with the meter
+Every litre issued from a site tank is logged against the equipment that took it, with the meter
 readings before and after. FuelGuard works out what each unit actually consumed, compares it with
 the standard set for that equipment type, and raises an alert when the gap is too wide to be
-explained by the work done. At the end of each month it reconciles what the tankers received against
+explained by the work done. At the end of each month it reconciles what the tanks received against
 what they issued, so fuel that went missing shows up as a variance rather than disappearing quietly.
 
 ---
@@ -16,7 +16,7 @@ what they issued, so fuel that went missing shows up as a variance rather than d
 | --- | --- |
 | **Fuel Entry** | The daily log register: date, equipment, driver/operator, litres, ODM or HM start and end, total km or hours, consumption, location & activity. Records takers file their own; administrators see every site. Exports to CSV. |
 | **Dashboard** | KPIs, consumption charts, the watchlist of units drifting from standard, and the latest entries. |
-| **Tankers** | Each tanker's running level, deliveries in (intakes), dip readings, and stock reconciliation — opening + received − issued vs. the measured dip. |
+| **Tanks** | Each tank's running level, deliveries in (intakes), dip readings, and stock reconciliation — opening + received − issued vs. the measured dip. |
 | **Theft Alerts** | The queue of raised alerts with their findings, read/unread state, review and resolution. |
 | **Monthly Summary** | Per-equipment consumption averages, standards, variance and cost for a reporting period; close and reopen the month. Exports to CSV. |
 | **Consumption Standards** | The L/km or L/hr standard per equipment type, and the alert thresholds that decide watch vs. flagged. |

@@ -17,6 +17,9 @@ import { statusStyles } from "@/utils/fuelEntryUtils";
 import { alertSeverityStyles } from "@/utils/statusUtils";
 
 const TILE_GRID = "mt-7 grid grid-cols-2 gap-3 lg:grid-cols-4";
+const ROW_LINK =
+  "flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-slate-50/70 focus:outline-none focus-visible:bg-slate-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500/50 sm:px-6";
+const CARD_LINK = "text-sm font-medium text-brand-600 transition-colors hover:text-brand-500";
 
 export default function DashboardView() {
   const query = useQuery(dashboardOverviewQuery());
@@ -46,6 +49,7 @@ export default function DashboardView() {
         <dl className={TILE_GRID}>
           <AnimatedStatTile
             label="Total fuel issued"
+            href="/portal/fuel_entry"
             value={kpis?.totalLitres ?? 0}
             suffix=" L"
             hint="This month"
@@ -54,6 +58,7 @@ export default function DashboardView() {
           />
           <AnimatedStatTile
             label="Fuel cost"
+            href="/portal/monthly_summary"
             value={kpis?.fuelCostGhs ?? 0}
             prefix="GHS "
             hint={kpis?.avgCostPerLitre ? `@ GHS ${kpis.avgCostPerLitre.toFixed(2)}/L` : "No fuel issued yet"}
@@ -62,6 +67,7 @@ export default function DashboardView() {
           />
           <AnimatedStatTile
             label="Active equipment"
+            href="/portal/equipment_and_vehicles"
             value={kpis?.activeEquipment ?? 0}
             hint={`${kpis?.idleOrMaintenance ?? 0} idle / maintenance`}
             icon={<Truck className="h-4 w-4 shrink-0 text-slate-400" aria-hidden />}
@@ -69,6 +75,7 @@ export default function DashboardView() {
           />
           <AnimatedStatTile
             label="Flagged anomalies"
+            href="/portal/theft_alerts"
             value={kpis?.openAlerts ?? 0}
             hint="Requires review"
             icon={<TriangleAlert className="h-4 w-4 shrink-0 text-brand-500" aria-hidden />}
@@ -78,10 +85,28 @@ export default function DashboardView() {
       )}
 
       <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <DataCard title="Daily fuel issuance" description="Last 11 days — litres issued" emptyState={placeholder(4)}>
+        <DataCard
+          title="Daily fuel issuance"
+          description="Last 11 days — litres issued"
+          action={
+            <Link href="/portal/fuel_entry" className={CARD_LINK}>
+              View log →
+            </Link>
+          }
+          emptyState={placeholder(4)}
+        >
           {data && <DailyIssuanceChart data={data.dailyIssuance} />}
         </DataCard>
-        <DataCard title="Consumption vs standard" description="Litres per hour, actual against standard" emptyState={placeholder(4)}>
+        <DataCard
+          title="Consumption vs standard"
+          description="Litres per hour, actual against standard"
+          action={
+            <Link href="/portal/consumption_standards" className={CARD_LINK}>
+              View standards →
+            </Link>
+          }
+          emptyState={placeholder(4)}
+        >
           {data && <ConsumptionChart data={data.consumption} />}
         </DataCard>
       </div>
@@ -92,7 +117,7 @@ export default function DashboardView() {
           description="Units drawing more than their standard"
           flush
           action={
-            <Link href="/portal/theft_alerts" className="text-sm font-medium text-brand-600 transition-colors hover:text-brand-500">
+            <Link href="/portal/theft_alerts" className={CARD_LINK}>
               View all →
             </Link>
           }
@@ -110,15 +135,14 @@ export default function DashboardView() {
         >
           <ul className="divide-y divide-slate-100">
             {data?.watchlist.map((item) => (
-              <li
-                key={item.id}
-                className="flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-slate-50/70 sm:px-6"
-              >
-                <div className="flex min-w-0 flex-col sm:flex-row sm:items-center sm:gap-3">
-                  <span className="order-2 whitespace-nowrap font-mono text-xs text-slate-500 sm:order-none">{item.equipmentCode}</span>
-                  <span className="truncate text-sm font-medium text-slate-900">{item.equipmentName}</span>
-                </div>
-                <StatusPill {...alertSeverityStyles[item.severity]} />
+              <li key={item.id}>
+                <Link href="/portal/theft_alerts" className={ROW_LINK}>
+                  <div className="flex min-w-0 flex-col sm:flex-row sm:items-center sm:gap-3">
+                    <span className="order-2 whitespace-nowrap font-mono text-xs text-slate-500 sm:order-none">{item.equipmentCode}</span>
+                    <span className="truncate text-sm font-medium text-slate-900">{item.equipmentName}</span>
+                  </div>
+                  <StatusPill {...alertSeverityStyles[item.severity]} />
+                </Link>
               </li>
             ))}
           </ul>
@@ -129,7 +153,7 @@ export default function DashboardView() {
           description="Latest fills recorded across all sites"
           flush
           action={
-            <Link href="/portal/fuel_entry" className="text-sm font-medium text-brand-600 transition-colors hover:text-brand-500">
+            <Link href="/portal/fuel_entry" className={CARD_LINK}>
               View log →
             </Link>
           }
@@ -149,21 +173,20 @@ export default function DashboardView() {
             {data?.recentEntries.map((entry) => {
               const status = statusStyles[entry.status];
               return (
-                <li
-                  key={entry.id}
-                  className="flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-slate-50/70 sm:px-6"
-                >
-                  <div className="flex min-w-0 flex-col sm:flex-row sm:items-center sm:gap-3">
-                    <span className="order-2 whitespace-nowrap font-mono text-xs text-slate-500 sm:order-none">{entry.code}</span>
-                    <span className="truncate text-sm font-medium text-slate-900">{entry.recordedBy}</span>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-3">
-                    <span className="hidden font-mono text-xs tabular-nums text-slate-400 sm:block">
-                      {formatShortDateTime(entry.dispensedAt)}
-                    </span>
-                    <span className="text-sm font-semibold tabular-nums text-slate-900">{entry.litres.toLocaleString()} L</span>
-                    <StatusPill label={status.shortLabel} icon={status.icon} className={status.className} />
-                  </div>
+                <li key={entry.id}>
+                  <Link href="/portal/fuel_entry" className={ROW_LINK}>
+                    <div className="flex min-w-0 flex-col sm:flex-row sm:items-center sm:gap-3">
+                      <span className="order-2 whitespace-nowrap font-mono text-xs text-slate-500 sm:order-none">{entry.code}</span>
+                      <span className="truncate text-sm font-medium text-slate-900">{entry.recordedBy}</span>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-3">
+                      <span className="hidden font-mono text-xs tabular-nums text-slate-400 sm:block">
+                        {formatShortDateTime(entry.dispensedAt)}
+                      </span>
+                      <span className="text-sm font-semibold tabular-nums text-slate-900">{entry.litres.toLocaleString()} L</span>
+                      <StatusPill label={status.shortLabel} icon={status.icon} className={status.className} />
+                    </div>
+                  </Link>
                 </li>
               );
             })}

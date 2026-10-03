@@ -4,6 +4,7 @@ import { SessionService } from "@/services/sessionService";
 import { TankDipService } from "@/services/tankDipService";
 import { TankIntakeService } from "@/services/tankIntakeService";
 import { TankService } from "@/services/tankService";
+import { TankTransferService } from "@/services/tankTransferService";
 import { formatLitres } from "@/services/utils";
 import type { ActionState } from "@/types/actions";
 import type { TankKind } from "@/types/tank";
@@ -58,7 +59,7 @@ export async function archiveTankAction(input: { id: string }): Promise<ActionSt
   try {
     const actor = await SessionService.requireUser();
     await TankService.archive(String(input?.id ?? ""), actor);
-    return { ok: true, message: "It no longer appears in tanker lists or the reconciliation." };
+    return { ok: true, message: "It no longer appears in tank lists or the reconciliation." };
   } catch (error) {
     return toErrorState(error);
   }
@@ -108,7 +109,48 @@ export async function recordDipAction(formData: FormData): Promise<ActionState> 
   }
 }
 
-/** Corrects a delivery. The tanker can't change — void it and record another instead. */
+export async function recordTransferAction(formData: FormData): Promise<ActionState> {
+  try {
+    const actor = await SessionService.requireUser();
+    const litres = requiredNumber(formData.get("litres"));
+    const created = await TankTransferService.create(
+      {
+        fromTankId: formText(formData.get("fromTankId")),
+        toTankId: formText(formData.get("toTankId")),
+        litres,
+        transferredAt: accraDateTime(formData.get("date"), formData.get("time")),
+        note: formText(formData.get("note")) || undefined,
+      },
+      actor
+    );
+    return { ok: true, message: `${created.code}: ${formatLitres(litres)} L moved. Both tank levels are updated.` };
+  } catch (error) {
+    return toErrorState(error);
+  }
+}
+
+/** Voids a transfer recorded in error, or restores one. `reason` is required when voiding. */
+export async function setTransferVoidedAction(formData: FormData): Promise<ActionState> {
+  try {
+    const actor = await SessionService.requireUser();
+    const voided = formText(formData.get("voided")) === "true";
+    await TankTransferService.setVoided(
+      formText(formData.get("id")),
+      { voided, reason: formText(formData.get("reason")) },
+      actor
+    );
+    return {
+      ok: true,
+      message: voided
+        ? "It stays in the log for the record, but no longer moves stock between the tanks."
+        : "It moves stock between the tanks again.",
+    };
+  } catch (error) {
+    return toErrorState(error);
+  }
+}
+
+/** Corrects a delivery. The tank can't change — void it and record another instead. */
 export async function updateIntakeAction(formData: FormData): Promise<ActionState> {
   try {
     const actor = await SessionService.requireUser();

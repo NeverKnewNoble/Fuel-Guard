@@ -5,7 +5,7 @@ export const LOGIN_PATH = "/auth/login";
 /** Portal sections only administrators may open — everything under the (admin) route group. */
 const ADMIN_PATHS = [
   "/portal/dashboard",
-  "/portal/tankers",
+  "/portal/tanks",
   "/portal/monthly_summary",
   "/portal/theft_alerts",
   "/portal/equipment_and_vehicles",

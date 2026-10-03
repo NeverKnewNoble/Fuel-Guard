@@ -54,7 +54,7 @@ export type CreateFuelEntryInput = {
 export type CreateFuelEntryResult = {
   entry: { id: string; code: string; status: EntryStatus };
   alerts: Finding[];
-  /** Non-blocking notes for the form, e.g. more litres drawn than the tanker's last dip showed. */
+  /** Non-blocking notes for the form, e.g. more litres drawn than the tank's last dip showed. */
   warnings: string[];
 };
 

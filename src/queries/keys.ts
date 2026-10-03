@@ -45,6 +45,10 @@ export const queryKeys = {
     all: ["intakes"] as const,
     list: () => [...queryKeys.intakes.all, "list"] as const,
   },
+  transfers: {
+    all: ["transfers"] as const,
+    list: () => [...queryKeys.transfers.all, "list"] as const,
+  },
   suppliers: {
     all: ["suppliers"] as const,
     list: () => [...queryKeys.suppliers.all, "list"] as const,

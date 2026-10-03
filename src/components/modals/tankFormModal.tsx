@@ -19,7 +19,7 @@ import { tankKindLabels } from "@/utils/tankUtils";
 type Props = {
   open: boolean;
   onClose: () => void;
-  /** Omit to add a tanker; pass an id to edit that tanker. */
+  /** Omit to add a tank; pass an id to edit that tank. */
   tankId?: string;
 };
 
@@ -34,12 +34,12 @@ function EditLoader({ onClose, tankId }: { onClose: () => void; tankId: string }
   if (detail.isSuccess) return <TankForm onClose={onClose} tank={detail.data} />;
 
   return (
-    <Modal open onClose={onClose} title="Edit tanker">
+    <Modal open onClose={onClose} title="Edit tank">
       {detail.isError ? (
-        <ErrorState size="sm" what="this tanker" message={detail.error.message} onRetry={() => detail.refetch()} retrying={detail.isFetching} />
+        <ErrorState size="sm" what="this tank" message={detail.error.message} onRetry={() => detail.refetch()} retrying={detail.isFetching} />
       ) : (
         <div role="status" className="space-y-5 pb-4">
-          <span className="sr-only">Loading tanker…</span>
+          <span className="sr-only">Loading tank…</span>
           {Array.from({ length: 4 }, (_, i) => (
             <div key={i}>
               <Skeleton className="h-3 w-24" />
@@ -54,7 +54,7 @@ function EditLoader({ onClose, tankId }: { onClose: () => void; tankId: string }
 
 function TankForm({ onClose, tank }: { onClose: () => void; tank?: TankDetail }) {
   const editing = Boolean(tank);
-  const formId = editing ? `edit-tank-${tank!.id}` : "add-tanker";
+  const formId = editing ? `edit-tank-${tank!.id}` : "add-tank";
   const sites = useQuery(sitesQuery());
 
   const createTank = useCreateTank();
@@ -68,13 +68,13 @@ function TankForm({ onClose, tank }: { onClose: () => void; tank?: TankDetail })
     <Modal
       open
       onClose={onClose}
-      title={editing ? `Edit ${tank!.code}` : "Add Tanker"}
+      title={editing ? `Edit ${tank!.code}` : "Add Tank"}
       description={editing ? tank!.name : "Register a bulk tank or mobile bowser that holds fuel on site."}
       footer={
         <>
           <PrimaryButton type="submit" form={formId} disabled={pending || noSites || sites.isPending}>
             {pending && <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden />}
-            {pending ? "Saving…" : editing ? "Save changes" : "Add Tanker"}
+            {pending ? "Saving…" : editing ? "Save changes" : "Add Tank"}
           </PrimaryButton>
           <SecondaryButton type="button" onClick={onClose} disabled={pending}>
             Cancel
@@ -84,7 +84,7 @@ function TankForm({ onClose, tank }: { onClose: () => void; tank?: TankDetail })
     >
       {noSites ? (
         <p className="mb-4 rounded-xl bg-amber-50 p-3.5 text-sm text-amber-800">
-          No active site to keep the tanker at. Add one on{" "}
+          No active site to keep the tank at. Add one on{" "}
           <Link href="/portal/sites" className="font-medium underline" onClick={onClose}>
             Sites
           </Link>
@@ -98,7 +98,7 @@ function TankForm({ onClose, tank }: { onClose: () => void; tank?: TankDetail })
             event.preventDefault();
             mutation.mutate(new FormData(event.currentTarget), {
               onSuccess: (result) => {
-                toast.success(editing ? `${tank!.code} updated` : "Tanker added", { description: result.message });
+                toast.success(editing ? `${tank!.code} updated` : "Tank added", { description: result.message });
                 onClose();
               },
             });
@@ -108,11 +108,11 @@ function TankForm({ onClose, tank }: { onClose: () => void; tank?: TankDetail })
           {editing && <input type="hidden" name="id" value={tank!.id} />}
 
           <FieldRow>
-            <Field label="Tanker ID" htmlFor="tk-code" hint={editing ? undefined : "Leave empty to number it automatically"} error={errors?.code}>
+            <Field label="Tank ID" htmlFor="tk-code" hint={editing ? undefined : "Leave empty to number it automatically"} error={errors?.code}>
               <TextInput id="tk-code" name="code" placeholder="TNK-08" defaultValue={tank?.code} required={editing} maxLength={30} disabled={pending} />
             </Field>
             <Field label="Name" htmlFor="tk-name" required error={errors?.name}>
-              <TextInput id="tk-name" name="name" placeholder="Bulk Tanker C" defaultValue={tank?.name} required maxLength={80} disabled={pending} />
+              <TextInput id="tk-name" name="name" placeholder="Bulk Tank C" defaultValue={tank?.name} required maxLength={80} disabled={pending} />
             </Field>
           </FieldRow>
 

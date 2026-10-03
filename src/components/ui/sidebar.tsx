@@ -35,7 +35,7 @@ const adminNavLinks: NavSection[] = [
     items: [
       { label: "Dashboard", href: "/portal/dashboard", icon: Gauge },
       { label: "Fuel Log Entry", href: "/portal/fuel_entry", icon: FileText },
-      { label: "Tankers", href: "/portal/tankers", icon: Container },
+      { label: "Tanks", href: "/portal/tanks", icon: Container },
       {
         label: "Monthly Summary",
         href: "/portal/monthly_summary",

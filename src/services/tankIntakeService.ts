@@ -48,7 +48,7 @@ export class TankIntakeService {
 
     const deliveryNote = input.deliveryNote.trim();
     const fields: Record<string, string> = {};
-    if (!input.tankId) fields.tankId = "Pick a tanker";
+    if (!input.tankId) fields.tankId = "Pick a tank";
     if (!input.supplierName.trim()) fields.supplier = "Required";
     if (!deliveryNote) fields.deliveryNote = "Enter the delivery note number";
     if (!isPositive(input.litres)) fields.litres = "Quantity must be above 0";
@@ -68,14 +68,14 @@ export class TankIntakeService {
         .where(eq(vTankLevels.tankId, input.tankId)),
       db.query.users.findFirst({ columns: { id: true, status: true }, where: { id: input.receivedById } }),
     ]);
-    if (!tank) throwIfInvalid({ tankId: "Pick a tanker" });
+    if (!tank) throwIfInvalid({ tankId: "Pick a tank" });
     if (!receiver || receiver.status !== "active") throwIfInvalid({ receivedById: "Pick who received the delivery" });
 
     const capacityL = Number(tank.capacityL);
     const currentL = Number(tank.currentL);
     if (currentL + input.litres > capacityL) {
       throwIfInvalid({
-        litres: `This delivery would overfill the tanker (capacity ${formatLitres(capacityL)} L, current ${formatLitres(currentL)} L).`,
+        litres: `This delivery would overfill the tank (capacity ${formatLitres(capacityL)} L, current ${formatLitres(currentL)} L).`,
       });
     }
 
@@ -104,8 +104,8 @@ export class TankIntakeService {
   }
 
   /**
-   * Corrects a delivery that was mistyped. The tanker can't change — void it and record another instead.
-   * Re-checks the tanker's free space, ignoring this delivery's own litres.
+   * Corrects a delivery that was mistyped. The tank can't change — void it and record another instead.
+   * Re-checks the tank's free space, ignoring this delivery's own litres.
    */
   static async update(id: string, input: UpdateIntakeInput, actor: Actor): Promise<void> {
     SessionService.assertAdmin(actor);
@@ -136,7 +136,7 @@ export class TankIntakeService {
         .where(eq(vTankLevels.tankId, current.tankId)),
       db.query.users.findFirst({ columns: { id: true, status: true }, where: { id: input.receivedById } }),
     ]);
-    if (!tank) throw new NotFoundError("Tanker");
+    if (!tank) throw new NotFoundError("Tank");
     if (!receiver || receiver.status !== "active") throwIfInvalid({ receivedById: "Pick who received the delivery" });
 
     const capacityL = Number(tank.capacityL);
@@ -144,7 +144,7 @@ export class TankIntakeService {
     const withoutThis = Number(tank.currentL) - current.litres;
     if (withoutThis + input.litres > capacityL) {
       throwIfInvalid({
-        litres: `That would overfill the tanker (capacity ${formatLitres(capacityL)} L, ${formatLitres(withoutThis)} L without this delivery).`,
+        litres: `That would overfill the tank (capacity ${formatLitres(capacityL)} L, ${formatLitres(withoutThis)} L without this delivery).`,
       });
     }
 

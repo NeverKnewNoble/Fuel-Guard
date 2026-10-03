@@ -5,22 +5,24 @@ import {
   createTankAction,
   recordDipAction,
   recordIntakeAction,
+  recordTransferAction,
   setIntakeVoidedAction,
+  setTransferVoidedAction,
   updateIntakeAction,
   updateTankAction,
-} from "@/app/portal/(admin)/tankers/actions";
+} from "@/app/portal/(admin)/tanks/actions";
 import { queryKeys } from "@/queries/keys";
 import { useActionMutation } from "@/queries/useActionMutation";
 
 // Tank cards, selects, the reconciliation and the intake log all show tank names and levels.
 const stockKeys = [queryKeys.tanks.all, queryKeys.reconciliation.all];
 
-export const useCreateTank = () => useActionMutation({ action: createTankAction, invalidates: stockKeys, errorTitle: "Couldn't add the tanker" });
+export const useCreateTank = () => useActionMutation({ action: createTankAction, invalidates: stockKeys, errorTitle: "Couldn't add the tank" });
 
 export const useUpdateTank = () =>
   useActionMutation({ action: updateTankAction, invalidates: [...stockKeys, queryKeys.intakes.all], errorTitle: "Couldn't save the changes" });
 
-export const useArchiveTank = () => useActionMutation({ action: archiveTankAction, invalidates: stockKeys, errorTitle: "Couldn't archive the tanker" });
+export const useArchiveTank = () => useActionMutation({ action: archiveTankAction, invalidates: stockKeys, errorTitle: "Couldn't archive the tank" });
 
 // A delivery can create a new supplier.
 export const useRecordIntake = () =>
@@ -36,3 +38,12 @@ export const useUpdateIntake = () =>
 
 export const useSetIntakeVoided = () =>
   useActionMutation({ action: setIntakeVoidedAction, invalidates: intakeKeys, errorTitle: "Couldn't update the delivery" });
+
+// A transfer moves stock between two tanks; it has no cost, so fuel costs and the dashboard are untouched.
+const transferKeys = [...stockKeys, queryKeys.transfers.all];
+
+export const useRecordTransfer = () =>
+  useActionMutation({ action: recordTransferAction, invalidates: transferKeys, errorTitle: "Couldn't record the transfer" });
+
+export const useSetTransferVoided = () =>
+  useActionMutation({ action: setTransferVoidedAction, invalidates: transferKeys, errorTitle: "Couldn't update the transfer" });

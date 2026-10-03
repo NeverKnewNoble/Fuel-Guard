@@ -91,7 +91,7 @@ function EditForm({ onClose, entry }: { onClose: () => void; entry: FuelEntryDet
         }}
       >
         <input type="hidden" name="id" value={entry.id} />
-        {/* Moving an entry to other equipment or another tanker would rewrite two sets of figures. */}
+        {/* Moving an entry to other equipment or another tank would rewrite two sets of figures. */}
         <input type="hidden" name="equipmentId" value={entry.equipment.id} />
         <input type="hidden" name="tankId" value={entry.tank.id} />
 

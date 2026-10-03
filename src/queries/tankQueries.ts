@@ -3,7 +3,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { apiFetch } from "@/queries/apiFetch";
 import { queryKeys } from "@/queries/keys";
 import type { SupplierOption } from "@/types/supplier";
-import type { IntakeRow, ReconciliationReport, TankCardData, TankDetail, TankDipRow, TankOption } from "@/types/tank";
+import type { IntakeRow, ReconciliationReport, TankCardData, TankDetail, TankDipRow, TankOption, TransferRow } from "@/types/tank";
 
 export const tanksQuery = () =>
   queryOptions({
@@ -39,6 +39,12 @@ export const intakesQuery = () =>
   queryOptions({
     queryKey: queryKeys.intakes.list(),
     queryFn: () => apiFetch<IntakeRow[]>("/api/intakes"),
+  });
+
+export const transfersQuery = () =>
+  queryOptions({
+    queryKey: queryKeys.transfers.list(),
+    queryFn: () => apiFetch<TransferRow[]>("/api/transfers"),
   });
 
 export const suppliersQuery = () =>

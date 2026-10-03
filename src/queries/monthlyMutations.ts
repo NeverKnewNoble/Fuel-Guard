@@ -4,7 +4,7 @@ import { closePeriodAction, reopenPeriodAction } from "@/app/portal/(admin)/mont
 import { queryKeys } from "@/queries/keys";
 import { useActionMutation } from "@/queries/useActionMutation";
 
-// Closing a month writes each tanker's opening and closing balances, which the reconciliation reads.
+// Closing a month writes each tank's opening and closing balances, which the reconciliation reads.
 const keys = [
   queryKeys.reportingPeriods.all,
   queryKeys.monthlySummary.all,

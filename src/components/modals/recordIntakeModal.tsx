@@ -19,7 +19,7 @@ type Props = {
   onClose: () => void;
   /** Pre-selects "Received by" when recording a new delivery. */
   currentUserId?: string;
-  /** Pass a delivery to correct it instead. Its tanker can't change. */
+  /** Pass a delivery to correct it instead. Its tank can't change. */
   intake?: IntakeRow;
 };
 
@@ -49,7 +49,7 @@ function RecordIntakeForm({ onClose, currentUserId, intake }: Omit<Props, "open"
   const noTanks = !editing && tanks.isSuccess && tanks.data.length === 0;
 
   const loadError = [
-    tanks.isError && `tankers (${tanks.error.message})`,
+    tanks.isError && `tanks (${tanks.error.message})`,
     accounts.isError && `users (${accounts.error.message})`,
   ].filter(Boolean);
 
@@ -61,7 +61,7 @@ function RecordIntakeForm({ onClose, currentUserId, intake }: Omit<Props, "open"
       description={
         editing
           ? "Corrects a delivery that was mistyped. Stock levels, the reconciliation and fuel costs follow the new figures."
-          : "Fuel received from a supplier into one of your tankers."
+          : "Fuel received from a supplier into one of your tanks."
       }
       size="lg"
       footer={
@@ -77,7 +77,7 @@ function RecordIntakeForm({ onClose, currentUserId, intake }: Omit<Props, "open"
       }
     >
       {noTanks ? (
-        <p className="mb-4 rounded-xl bg-amber-50 p-3.5 text-sm text-amber-800">Add a tanker first, then record deliveries into it.</p>
+        <p className="mb-4 rounded-xl bg-amber-50 p-3.5 text-sm text-amber-800">Add a tank first, then record deliveries into it.</p>
       ) : (
         <form
           id={formId}
@@ -96,13 +96,13 @@ function RecordIntakeForm({ onClose, currentUserId, intake }: Omit<Props, "open"
           {editing && <input type="hidden" name="id" value={intake!.id} />}
 
           {editing ? (
-            // Moving a delivery between tankers would rewrite two tanks' history; void it and record another instead.
-            <DerivedValue label="Tanker" value={intake!.tankName} />
+            // Moving a delivery between tanks would rewrite two tanks' history; void it and record another instead.
+            <DerivedValue label="Tank" value={intake!.tankName} />
           ) : (
-            <Field label="Tanker" htmlFor="in-tank" required error={errors?.tankId}>
+            <Field label="Tank" htmlFor="in-tank" required error={errors?.tankId}>
               <SelectInput id="in-tank" name="tankId" defaultValue="" required disabled={pending || tanks.isPending}>
                 <option value="" disabled>
-                  {tanks.isPending ? "Loading tankers…" : "Select tanker…"}
+                  {tanks.isPending ? "Loading tanks…" : "Select tank…"}
                 </option>
                 {tanks.data?.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -138,7 +138,7 @@ function RecordIntakeForm({ onClose, currentUserId, intake }: Omit<Props, "open"
           </FieldRow>
 
           <FieldRow>
-            <Field label="Quantity received (L)" htmlFor="in-litres" required hint="Must fit in the tanker's free space" error={errors?.litres}>
+            <Field label="Quantity received (L)" htmlFor="in-litres" required hint="Must fit in the tank's free space" error={errors?.litres}>
               <TextInput
                 id="in-litres"
                 name="litres"

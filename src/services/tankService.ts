@@ -13,7 +13,7 @@ import { TankDipService } from "./tankDipService";
 import { type BatchWrites, formatLitres, isNonNegative, isPositive, toNumber, toNumeric } from "./utils";
 
 const KINDS: TankKind[] = ["bulk", "mobile_bowser", "day_tank"];
-const codeTaken = () => new ConflictError("That tanker ID is already used.");
+const codeTaken = () => new ConflictError("That tank ID is already used.");
 
 export class TankService {
   static async listWithLevels(filters: { siteId?: string } = {}): Promise<TankCardData[]> {
@@ -49,7 +49,7 @@ export class TankService {
     });
   }
 
-  /** Tankers header: "22,140 L available across 7 tanks". */
+  /** Tanks header: "22,140 L available across 7 tanks". */
   static async getTotals(): Promise<TankTotals> {
     const [row] = await db
       .select({
@@ -65,7 +65,7 @@ export class TankService {
       where: { id },
       with: { site: { columns: { id: true, code: true, name: true } } },
     });
-    if (!row) throw new NotFoundError("Tanker");
+    if (!row) throw new NotFoundError("Tank");
     return {
       id: row.id,
       code: row.code,
@@ -78,7 +78,7 @@ export class TankService {
     };
   }
 
-  /** Non-archived tanks for the fuel entry and intake selects ("Bulk Tanker A (7,250 L)"). */
+  /** Non-archived tanks for the fuel entry and intake selects ("Bulk Tank A (7,250 L)"). */
   static async listForSelect(): Promise<TankOption[]> {
     const rows = await db
       .select({
@@ -102,8 +102,8 @@ export class TankService {
     const name = input.name.trim();
     const openingL = input.openingL ?? null;
     const fields: Record<string, string> = {};
-    if (!name) fields.name = "Enter a tanker name";
-    if (!KINDS.includes(input.kind)) fields.kind = "Pick a tanker type";
+    if (!name) fields.name = "Enter a tank name";
+    if (!KINDS.includes(input.kind)) fields.kind = "Pick a tank type";
     if (!isPositive(input.capacityL)) fields.capacityL = "Capacity must be above 0";
     if (openingL !== null) {
       if (!isNonNegative(openingL)) fields.openingL = "Opening level can't be negative";
@@ -156,8 +156,8 @@ export class TankService {
       siteId: input.siteId ?? current.siteId,
       capacityL: input.capacityL ?? current.capacityL,
     };
-    if (!next.name) fields.name = "Enter a tanker name";
-    if (!KINDS.includes(next.kind)) fields.kind = "Pick a tanker type";
+    if (!next.name) fields.name = "Enter a tank name";
+    if (!KINDS.includes(next.kind)) fields.kind = "Pick a tank type";
     if (!isPositive(next.capacityL)) fields.capacityL = "Capacity must be above 0";
     else if (next.capacityL !== current.capacityL) {
       const latest = await TankDipService.latest(id);
