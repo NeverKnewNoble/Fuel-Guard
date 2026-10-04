@@ -72,5 +72,5 @@ Equipment.
 3. `yarn db:migrate` against the deployment's database.
 4. `DATABASE_URL` and `AUTH_SECRET` set for the environment being deployed.
 5. `drizzle/`, `docs/`, `src/` committed; `.env` not.
-6. After the deploy: sign in, and open Tankers — it's the page that touches the most views
+6. After the deploy: sign in, and open Tanks — it's the page that touches the most views
    (`v_tank_levels`, `v_tank_reconciliation`), so it fails loudly if a migration was missed.

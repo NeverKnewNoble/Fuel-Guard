@@ -51,7 +51,7 @@ export function StatTilesSkeleton({ count, className }: { count: number; classNa
   return (
     <div className={className}>
       {Array.from({ length: count }, (_, i) => (
-        <div key={i} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <div key={i} className="rounded-2xl border border-slate-200 bg-surface p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <div className="flex items-start justify-between gap-2">
             <Skeleton className="h-4 w-24" />
             <Skeleton className="h-4 w-4 rounded" />
@@ -80,7 +80,7 @@ export function DataCardSkeleton({
   action?: boolean;
 }) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
+    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-surface shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-5 py-4 sm:px-6">
         <div className="min-w-0 flex-1">
           <Skeleton className="h-4 w-40" />
@@ -217,7 +217,7 @@ function TilesBody() {
   );
 }
 
-/** Matches the Tankers page's "Fuel tankers" row of `TankCard`s. */
+/** Matches the Tanks page's "Fuel tanks" row of `TankCard`s. */
 export function TankCardsSkeleton({ count = 4 }: { count?: number }) {
   return (
     <div>
@@ -227,7 +227,7 @@ export function TankCardsSkeleton({ count = 4 }: { count?: number }) {
       </div>
       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: count }, (_, i) => (
-          <div key={i} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+          <div key={i} className="rounded-2xl border border-slate-200 bg-surface p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5">
                 <Skeleton className="h-9 w-9 rounded-xl" />

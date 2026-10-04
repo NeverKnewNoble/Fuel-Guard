@@ -26,7 +26,7 @@ export default function EmptyState({
     <div
       className={`flex flex-col items-center justify-center px-5 text-center sm:px-6 ${
         size === "sm" ? "py-8" : "py-12"
-      } ${bordered ? "rounded-2xl border border-dashed border-slate-300 bg-white" : ""}`}
+      } ${bordered ? "rounded-2xl border border-dashed border-slate-300 bg-surface" : ""}`}
     >
       <span
         className={`flex items-center justify-center rounded-xl bg-slate-100 text-slate-400 ${

@@ -2,7 +2,7 @@
 
 import { Fuel } from "lucide-react";
 
-import { TankRowActions } from "@/components/tankers/tankRowActions";
+import { TankRowActions } from "@/components/tanks/tankRowActions";
 import {
   DetailGroup,
   DetailItem,
@@ -22,7 +22,7 @@ export default function TankCard({ tank }: { tank: TankCardData }) {
   const neverDipped = tank.measuredAt === null;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-surface p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2.5">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500">
@@ -116,7 +116,7 @@ export default function TankCard({ tank }: { tank: TankCardData }) {
             <DetailItem label="Last refill">{formatShortDateTime(tank.lastRefillAt, "None yet")}</DetailItem>
           </DetailGroup>
 
-          <DetailGroup title="Tanker">
+          <DetailGroup title="Tank">
             <DetailItem label="Code">{tank.code}</DetailItem>
             <DetailItem label="Site">{tank.siteName}</DetailItem>
           </DetailGroup>

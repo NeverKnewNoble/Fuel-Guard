@@ -11,7 +11,7 @@ export async function closePeriodAction(input: { id: string }): Promise<ActionSt
   try {
     const actor = await SessionService.requireUser();
     await ReportingPeriodService.close(String(input?.id ?? ""), actor);
-    return { ok: true, message: "Each tanker's closing dip is now next month's opening balance." };
+    return { ok: true, message: "Each tank's closing dip is now next month's opening balance." };
   } catch (error) {
     return toErrorState(error);
   }

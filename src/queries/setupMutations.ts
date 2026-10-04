@@ -9,7 +9,7 @@ import { archiveSiteAction, createSiteAction, updateSiteAction } from "@/app/por
 import { queryKeys } from "@/queries/keys";
 import { useActionMutation } from "@/queries/useActionMutation";
 
-// Site names appear on equipment, tankers, accounts and fuel entries, so those lists follow a rename.
+// Site names appear on equipment, tanks, accounts and fuel entries, so those lists follow a rename.
 const siteKeys = [
   queryKeys.sites.all,
   queryKeys.equipment.all,

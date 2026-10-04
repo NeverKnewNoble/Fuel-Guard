@@ -175,7 +175,7 @@ export function SelectionBar({
         <button
           type="button"
           onClick={() => onExport?.([...selected], clear)}
-          className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+          className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 bg-surface px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
         >
           <Download className="h-3.5 w-3.5 text-slate-400" aria-hidden />
           Export
@@ -185,7 +185,7 @@ export function SelectionBar({
         <button
           type="button"
           onClick={() => onDelete?.([...selected], clear)}
-          className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-brand-200 bg-white px-3 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-50"
+          className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-brand-200 bg-surface px-3 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-50"
         >
           <Trash2 className="h-3.5 w-3.5 text-brand-500" aria-hidden />
           Delete

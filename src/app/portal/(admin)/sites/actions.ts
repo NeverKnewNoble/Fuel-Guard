@@ -18,7 +18,7 @@ export async function createSiteAction(formData: FormData): Promise<ActionState>
       },
       actor
     );
-    return { ok: true, message: `${created.code} can now be used for equipment, tankers and accounts.` };
+    return { ok: true, message: `${created.code} can now be used for equipment, tanks and accounts.` };
   } catch (error) {
     return toErrorState(error);
   }

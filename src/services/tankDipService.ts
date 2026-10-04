@@ -12,12 +12,12 @@ export class TankDipService {
     SessionService.assertAdmin(actor);
 
     const tank = await db.query.tanks.findFirst({ columns: { id: true, capacityL: true, archivedAt: true }, where: { id: input.tankId } });
-    if (!tank || tank.archivedAt) throw new NotFoundError("Tanker");
+    if (!tank || tank.archivedAt) throw new NotFoundError("Tank");
     const capacityL = Number(tank.capacityL);
 
     const fields: Record<string, string> = {};
     if (!isNonNegative(input.measuredL)) fields.measuredL = "Enter the measured litres";
-    else if (input.measuredL > capacityL) fields.measuredL = `Can't be more than the tanker's ${formatLitres(capacityL)} L capacity`;
+    else if (input.measuredL > capacityL) fields.measuredL = `Can't be more than the tank's ${formatLitres(capacityL)} L capacity`;
     if (!isValidDate(input.measuredAt)) fields.measuredAt = "Enter a valid date and time";
     else if (isInFuture(input.measuredAt)) fields.measuredAt = "Can't be in the future";
     throwIfInvalid(fields);

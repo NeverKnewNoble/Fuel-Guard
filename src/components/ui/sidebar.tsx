@@ -35,7 +35,7 @@ const adminNavLinks: NavSection[] = [
     items: [
       { label: "Dashboard", href: "/portal/dashboard", icon: Gauge },
       { label: "Fuel Log Entry", href: "/portal/fuel_entry", icon: FileText },
-      { label: "Tankers", href: "/portal/tankers", icon: Container },
+      { label: "Tanks", href: "/portal/tanks", icon: Container },
       {
         label: "Monthly Summary",
         href: "/portal/monthly_summary",
@@ -90,9 +90,6 @@ function Brand() {
       <span className="min-w-0">
         <span className="block truncate text-[15px] font-semibold leading-tight text-slate-900">
           FuelGuard
-        </span>
-        <span className="block truncate text-xs text-slate-500">
-          Royal Dede Construction Ltd
         </span>
       </span>
     </Link>
@@ -217,7 +214,7 @@ export default function Sidebar({ user }: { user: SidebarUser }) {
   return (
     <>
       {/* Mobile top bar */}
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-slate-200 bg-white px-4 md:hidden">
+      <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-slate-200 bg-surface px-4 md:hidden">
         <button
           type="button"
           onClick={() => setIsOpen(true)}
@@ -226,7 +223,7 @@ export default function Sidebar({ user }: { user: SidebarUser }) {
         >
           <Menu className="h-5 w-5" aria-hidden />
           {unreadAlerts > 0 && (
-            <span aria-hidden className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-brand-600 ring-2 ring-white" />
+            <span aria-hidden className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-brand-600 ring-2 ring-surface" />
           )}
         </button>
         <span className="flex items-center gap-2">
@@ -244,9 +241,9 @@ export default function Sidebar({ user }: { user: SidebarUser }) {
             type="button"
             aria-label="Close navigation"
             onClick={() => setIsOpen(false)}
-            className="absolute inset-0 bg-slate-900/40"
+            className="absolute inset-0 bg-slate-900/40 dark:bg-black/60"
           />
-          <div className="absolute inset-y-0 left-0 flex w-72 flex-col bg-white shadow-xl">
+          <div className="absolute inset-y-0 left-0 flex w-72 flex-col bg-surface shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
               <Brand />
               <button
@@ -265,7 +262,7 @@ export default function Sidebar({ user }: { user: SidebarUser }) {
       )}
 
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-slate-200 bg-white md:flex">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-slate-200 bg-surface md:flex">
         <div className="border-b border-slate-200 px-4 py-5">
           <Brand />
         </div>

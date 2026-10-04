@@ -352,7 +352,7 @@ type CreateUserInput = { name: string; email: string; role: AppUserRole; siteId:
 ### 4.3 `SiteService`
 
 **File:** `src/services/siteService.ts`
-**Used by:** every "Site" dropdown (Create User, Add Equipment, Add Tanker), filters.
+**Used by:** every "Site" dropdown (Create User, Add Equipment, Add Tank), filters.
 **Tables:** `sites`, `equipment`, `tanks`, `audit_log`.
 
 ```ts
@@ -515,7 +515,7 @@ export class SupplierService {
 ### 4.9 `TankService`
 
 **File:** `src/services/tankService.ts`
-**Used by:** Tankers → **Fuel tankers** scroller (`TankScroller`/`TankCard`) and its header total; **Add Tanker** modal; New Fuel Entry → **Drawn from tanker** select; Record Intake → **Tanker** select.
+**Used by:** Tanks → **Fuel tanks** scroller (`TankScroller`/`TankCard`) and its header total; **Add Tank** modal; New Fuel Entry → **Drawn from tank** select; Record Intake → **Tank** select.
 **Tables/views:** `tanks`, `v_tank_levels`, `tank_intakes`, `tank_dips`, `tank_period_balances`, `sites`, `audit_log`.
 
 ```ts
@@ -536,11 +536,11 @@ type CreateTankInput = { code?: string; name: string; kind: "bulk" | "mobile_bow
 
 | Method | Page / trigger | What it does |
 | --- | --- | --- |
-| `listWithLevels()` | Tankers → tank cards | Select from `vTankLevels` joined to `sites`. `currentL` = the running level (last dip + intake − issued since it); `measuredL` / `measuredAt` are the dip itself and `sinceDipL` the movement since. `level`: reuse `levelOf()` in `src/utils/tankUtils.tsx` so the cards keep their colours. Order by code. Replaces `fuelTanks` in sample data. The sample's `openingL`/`issuedL` fields belong to the reconciliation now; see `ReconciliationService`. |
-| `getTotals()` | Tankers header ("22,140 L available across 7 tanks") | `sum(current_l)` and `count(*)` from `vTankLevels`. |
-| `getById(id)` | internal / edit | `db.query.tanks.findFirst({ where: { id }, with: { site: true } })` → `NotFoundError("Tanker")`. |
-| `listForSelect()` | Fuel entry & intake selects (`"Bulk Tanker A (7,250 L)"`) | Non-archived tanks with `currentL` from `vTankLevels`. |
-| `create(input, actor)` | **Add Tanker** modal (fields: Tanker ID, Name, Site, Capacity, Opening level) | 1. Admin. 2. `capacityL > 0`; `openingL` between 0 and capacity. 3. Get the current period with `ReportingPeriodService.getCurrent()` **before** the batch. 4. `const id = crypto.randomUUID()`. 5. Batch: insert tank (`code` only if typed, else the sequence makes `TNK-##`) `returning({ id, code })`; **if `openingL` given**, insert a `tank_dips` row (`measuredL = openingL`, `measuredAt = now`, `recordedBy = actor.id`, `note: "Opening level"`) **and** a `tank_period_balances` row (`periodId`, `tankId: id`, `openingL`); audit. 6. Unique violation on code → `ConflictError`. |
+| `listWithLevels()` | Tanks → tank cards | Select from `vTankLevels` joined to `sites`. `currentL` = the running level (last dip + intake − issued since it); `measuredL` / `measuredAt` are the dip itself and `sinceDipL` the movement since. `level`: reuse `levelOf()` in `src/utils/tankUtils.tsx` so the cards keep their colours. Order by code. Replaces `fuelTanks` in sample data. The sample's `openingL`/`issuedL` fields belong to the reconciliation now; see `ReconciliationService`. |
+| `getTotals()` | Tanks header ("22,140 L available across 7 tanks") | `sum(current_l)` and `count(*)` from `vTankLevels`. |
+| `getById(id)` | internal / edit | `db.query.tanks.findFirst({ where: { id }, with: { site: true } })` → `NotFoundError("Tank")`. |
+| `listForSelect()` | Fuel entry & intake selects (`"Bulk Tank A (7,250 L)"`) | Non-archived tanks with `currentL` from `vTankLevels`. |
+| `create(input, actor)` | **Add Tank** modal (fields: Tank ID, Name, Site, Capacity, Opening level) | 1. Admin. 2. `capacityL > 0`; `openingL` between 0 and capacity. 3. Get the current period with `ReportingPeriodService.getCurrent()` **before** the batch. 4. `const id = crypto.randomUUID()`. 5. Batch: insert tank (`code` only if typed, else the sequence makes `TNK-##`) `returning({ id, code })`; **if `openingL` given**, insert a `tank_dips` row (`measuredL = openingL`, `measuredAt = now`, `recordedBy = actor.id`, `note: "Opening level"`) **and** a `tank_period_balances` row (`periodId`, `tankId: id`, `openingL`); audit. 6. Unique violation on code → `ConflictError`. |
 | `update(id, input, actor)` | ⋯ → Edit | Admin. Capacity may not go below the current level. Audit. |
 | `archive(id, actor)` | ⋯ → Archive | Admin. Refuse if the current level is above 0 (`ConflictError("Empty or transfer the fuel first.")`). Set `archivedAt`. Audit. |
 | `getLatestUnitCost(tankId)` | internal (fuel entry cost snapshot) | 1. `cost_per_litre` of the newest `tank_intakes` row for this tank. 2. If none, the newest intake across **all** tanks. 3. If still none → `ValidationError("Record a fuel delivery before issuing fuel, so the cost can be calculated.")`. Return a number. |
@@ -550,7 +550,7 @@ type CreateTankInput = { code?: string; name: string; kind: "bulk" | "mobile_bow
 ### 4.10 `TankIntakeService`
 
 **File:** `src/services/tankIntakeService.ts`
-**Used by:** Tankers → **Record Intake** modal and **Intake log** table.
+**Used by:** Tanks → **Record Intake** modal and **Intake log** table.
 **Tables:** `tank_intakes`, `suppliers`, `tanks`, `v_tank_levels`, `users`.
 
 ```ts
@@ -566,15 +566,15 @@ type CreateIntakeInput = { tankId: string; supplierName: string; deliveryNote: s
 
 | Method | Page / trigger | What it does |
 | --- | --- | --- |
-| `list(filters)` | **Intake log** table | `db.query.tankIntakes.findMany({ with: { tank: true, supplier: true, receiver: true }, orderBy: { receivedAt: "desc" }, limit: filters.limit ?? 50 })`, with date filters as `receivedAt: { gte: from, lt: to }`. Map to `IntakeRow` (matches `TankerIntake` in `src/types/tank.ts`); `totalCost` comes from the generated column. |
-| `create(input, actor)` | **Record Intake** modal (Tanker, Supplier, Delivery note, Quantity, Cost per litre, Date, Time, Received by) | 1. Admin. 2. `litres > 0`, `costPerLitre >= 0`, delivery note required. 3. `ReportingPeriodService.assertOpen(input.receivedAt)`. 4. Load the tank (not archived) and its current level from `vTankLevels`. **Capacity check:** `currentL + litres > capacityL` → `ValidationError({ litres: "This delivery would overfill the tanker (capacity 10,000 L, current 7,250 L)." })`. 5. `SupplierService.findOrCreate(supplierName)`. 6. Insert `returning({ id, code, totalCost })`. 7. `isUniqueViolation(e, "tank_intakes_supplier_delivery_note_key")` → `ConflictError("Delivery note DN-… is already recorded for this supplier.")`. **UI change needed:** "Received by" is a free-text name today (`currentUser.name`); make it a user `<select>` posting `receivedById`, defaulting to the signed-in user. |
+| `list(filters)` | **Intake log** table | `db.query.tankIntakes.findMany({ with: { tank: true, supplier: true, receiver: true }, orderBy: { receivedAt: "desc" }, limit: filters.limit ?? 50 })`, with date filters as `receivedAt: { gte: from, lt: to }`. Map to `IntakeRow` (matches `TankIntake` in `src/types/tank.ts`); `totalCost` comes from the generated column. |
+| `create(input, actor)` | **Record Intake** modal (Tank, Supplier, Delivery note, Quantity, Cost per litre, Date, Time, Received by) | 1. Admin. 2. `litres > 0`, `costPerLitre >= 0`, delivery note required. 3. `ReportingPeriodService.assertOpen(input.receivedAt)`. 4. Load the tank (not archived) and its current level from `vTankLevels`. **Capacity check:** `currentL + litres > capacityL` → `ValidationError({ litres: "This delivery would overfill the tank (capacity 10,000 L, current 7,250 L)." })`. 5. `SupplierService.findOrCreate(supplierName)`. 6. Insert `returning({ id, code, totalCost })`. 7. `isUniqueViolation(e, "tank_intakes_supplier_delivery_note_key")` → `ConflictError("Delivery note DN-… is already recorded for this supplier.")`. **UI change needed:** "Received by" is a free-text name today (`currentUser.name`); make it a user `<select>` posting `receivedById`, defaulting to the signed-in user. |
 
 ---
 
 ### 4.11 `TankDipService`
 
 **File:** `src/services/tankDipService.ts`
-**Used by:** a **Record dip** action on Tankers (not built yet); `TankService`, `ReportingPeriodService`.
+**Used by:** a **Record dip** action on Tanks (not built yet); `TankService`, `ReportingPeriodService`.
 **Tables:** `tank_dips`, `tanks`.
 
 ```ts
@@ -596,7 +596,7 @@ export class TankDipService {
 ### 4.12 `ReportingPeriodService`
 
 **File:** `src/services/reportingPeriodService.ts`
-**Used by:** Monthly Summary (month picker, **Close month**); Tankers reconciliation; `FuelEntryService` / `TankIntakeService` (block edits in closed months).
+**Used by:** Monthly Summary (month picker, **Close month**); Tanks reconciliation; `FuelEntryService` / `TankIntakeService` (block edits in closed months).
 **Tables/views:** `reporting_periods`, `tank_period_balances`, `tanks`, `v_tank_reconciliation`, `audit_log`.
 
 ```ts
@@ -616,7 +616,7 @@ export class ReportingPeriodService {
 | `getCurrent()` | `getOrCreate(monthStart())`. |
 | `list()` | Newest first, `with: { closer: true }`. Feeds the Monthly Summary month picker; the title "Monthly Summary — September 2024" comes from the selected month. |
 | `assertOpen(at)` | Look up the period for `monthStart(at)`. If it exists and is `closed` → `ValidationError("September 2024 is closed. Ask an administrator to reopen it.")`. |
-| `close(periodId, actor)` | 1. Admin. 2. The period must be `open` → otherwise `ConflictError`. 3. Read `vTankReconciliation` for the period. **Every tank needs a measured level:** list tanks with `measuredL === null` → `ValidationError("Record a closing dip for: Bulk Tanker A, …")`. 4. `const next = await getOrCreate(monthStart of month + 1)`. 5. Batch: for each tank, upsert `tank_period_balances(periodId, tankId)` with `openingL` (keep the existing value) and `closingMeasuredL = measuredL`; upsert the **next** period's balance with `openingL = measuredL` (`onConflictDoUpdate` on `[periodId, tankId]`); update the period to `status: "closed", closedBy: actor.id, closedAt: new Date()` (the check constraint needs both set); audit `period.close`. |
+| `close(periodId, actor)` | 1. Admin. 2. The period must be `open` → otherwise `ConflictError`. 3. Read `vTankReconciliation` for the period. **Every tank needs a measured level:** list tanks with `measuredL === null` → `ValidationError("Record a closing dip for: Bulk Tank A, …")`. 4. `const next = await getOrCreate(monthStart of month + 1)`. 5. Batch: for each tank, upsert `tank_period_balances(periodId, tankId)` with `openingL` (keep the existing value) and `closingMeasuredL = measuredL`; upsert the **next** period's balance with `openingL = measuredL` (`onConflictDoUpdate` on `[periodId, tankId]`); update the period to `status: "closed", closedBy: actor.id, closedAt: new Date()` (the check constraint needs both set); audit `period.close`. |
 | `reopen(periodId, actor)` | 1. Admin. 2. Refuse if the **next** period is already closed. 3. Batch: `status: "open", closedBy: null, closedAt: null`; clear this period's `closingMeasuredL` values; audit `period.reopen`. The next month's opening values stay until the month is closed again. |
 
 ---
@@ -624,7 +624,7 @@ export class ReportingPeriodService {
 ### 4.13 `ReconciliationService`
 
 **File:** `src/services/reconciliationService.ts`
-**Used by:** Tankers → **Stock reconciliation** table.
+**Used by:** Tanks → **Stock reconciliation** table.
 **Views:** `v_tank_reconciliation`.
 
 ```ts
@@ -899,7 +899,7 @@ What each page calls on load, and what each button calls.
 | **Dashboard** `(admin)/dashboard` | `DashboardService.getOverview(actor)` | New Fuel Log Entry → same action as Fuel Entry |
 | **Fuel Entry** `fuel_entry` | `FuelEntryService.getSummary({ actor, since: 2 days ago })`, `FuelEntryService.listRecent({ actor, status })` | Filter tabs → re-query with `status` (search param `?status=flagged`); ⋯ → Request correction → `FuelEntryCorrectionService.request` |
 | **New Fuel Entry modal** | `EquipmentService.listForEntryForm(actor)`, `TankService.listForSelect()`, `OperatorService.listActive({ siteId })` (load in the page, pass as props) | Save Entry / Save & Add Another → `FuelEntryService.create` |
-| **Tankers** `(admin)/tankers` | `TankService.listWithLevels()`, `TankService.getTotals()`, `ReconciliationService.getCurrent()`, `TankIntakeService.list({ limit: 50 })` | Add Tanker → `TankService.create`; Record Intake → `TankIntakeService.create`; Record dip → `TankDipService.record`; ⋯ → `TankService.update` / `archive` |
+| **Tanks** `(admin)/tanks` | `TankService.listWithLevels()`, `TankService.getTotals()`, `ReconciliationService.getCurrent()`, `TankIntakeService.list({ limit: 50 })` | Add Tank → `TankService.create`; Record Intake → `TankIntakeService.create`; Record dip → `TankDipService.record`; ⋯ → `TankService.update` / `archive` |
 | **Record Intake modal** | `TankService.listForSelect()`, `SupplierService.list()`, `UserService.listAccounts({ role: "administrator", status: "active" })` | → `TankIntakeService.create` |
 | **Monthly Summary** `(admin)/monthly_summary` | `ReportingPeriodService.list()` (picker), `MonthlySummaryService.getTotals(periodId)`, `MonthlySummaryService.getRows(periodId)` | Export CSV → Route Handler + `MonthlySummaryService.toCsv`; Close month → `ReportingPeriodService.close`; Reopen → `reopen` |
 | **Theft Alerts** `(admin)/theft_alerts` | `TheftAlertService.getCounts()`, `TheftAlertService.list({ userId: actor.id })` | Mark as read → `markAsRead`; Mark all as read → `markAllAsRead`; Start review → `startReview`; Resolve → `resolve`; Reopen → `reopen` |
@@ -914,10 +914,10 @@ After every write, revalidate the page that shows the data:
 | --- | --- |
 | Fuel entry, correction | `/portal/fuel_entry`, `/portal/dashboard` |
 | Alert read / resolve | `/portal/theft_alerts`, and `("/portal", "layout")` for the sidebar badge |
-| Intake, dip, tank | `/portal/tankers` |
+| Intake, dip, tank | `/portal/tanks` |
 | Equipment, type, threshold | `/portal/equipment_and_vehicles`, `/portal/consumption_standards` |
 | User | `/portal/users_and_roles` |
-| Period close/reopen | `/portal/monthly_summary`, `/portal/tankers` |
+| Period close/reopen | `/portal/monthly_summary`, `/portal/tanks` |
 
 ---
 

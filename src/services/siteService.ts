@@ -101,7 +101,7 @@ export class SiteService {
     ]);
   }
 
-  /** Sites are archived, never deleted. Refused while equipment or tankers still belong to the site. */
+  /** Sites are archived, never deleted. Refused while equipment or tanks still belong to the site. */
   static async archive(id: string, actor: Actor): Promise<void> {
     SessionService.assertAdmin(actor);
     const site = await SiteService.getById(id);
@@ -114,7 +114,7 @@ export class SiteService {
     if (equipmentCount > 0 || tankCount > 0) {
       const parts = [
         equipmentCount > 0 ? `${equipmentCount} equipment unit${equipmentCount === 1 ? "" : "s"}` : null,
-        tankCount > 0 ? `${tankCount} tanker${tankCount === 1 ? "" : "s"}` : null,
+        tankCount > 0 ? `${tankCount} tank${tankCount === 1 ? "" : "s"}` : null,
       ].filter(Boolean);
       throw new ConflictError(`${site.name} still has ${parts.join(" and ")}. Move them to another site first.`);
     }

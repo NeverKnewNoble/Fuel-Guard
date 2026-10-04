@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { db } from "@/db";
 import { operators } from "@/db/schema";
 import type { CreateOperatorInput, OperatorOption, OperatorRow, UpdateOperatorInput } from "@/types/operator";
@@ -8,7 +8,7 @@ import { SessionService } from "./sessionService";
 import { SiteService } from "./siteService";
 
 const USER_CONSTRAINT = "operators_user_id_key";
-const userTaken = () => new ConflictError("That user is already linked to another operator.");
+const userTaken = () => new ConflictError("That user was linked to another operator at the same moment. Try again.");
 
 /** Operators are the people who drive or run equipment. They are deactivated, never deleted, because fuel entries point at them. */
 export class OperatorService {
@@ -61,13 +61,17 @@ export class OperatorService {
     const userId = input.userId || null;
 
     if (siteId) await SiteService.assertActive(siteId);
-    if (userId) await assertUserFree(userId, null);
+    if (userId) await assertUserExists(userId);
+
+    const id = crypto.randomUUID();
+    const insert = db
+      .insert(operators)
+      .values({ id, name, phone: input.phone?.trim() || null, siteId, userId })
+      .returning({ id: operators.id });
 
     try {
-      const [created] = await db
-        .insert(operators)
-        .values({ name, phone: input.phone?.trim() || null, siteId, userId })
-        .returning({ id: operators.id });
+      if (!userId) return (await insert)[0];
+      const [, [created]] = await db.batch([releaseUser(userId, id), insert]);
       return created;
     } catch (error) {
       if (isUniqueViolation(error, USER_CONSTRAINT)) throw userTaken();
@@ -106,14 +110,22 @@ export class OperatorService {
     return OperatorService.setActive(id, false, actor);
   }
 
-  /** Links the operator to a portal user account, or clears the link with `null`. */
+  /**
+   * Links the operator to a portal user account, or clears the link with `null`. An account belongs
+   * to one operator at a time, so one already linked elsewhere is moved here.
+   */
   static async linkUser(operatorId: string, userId: string | null, actor: Actor): Promise<void> {
     SessionService.assertAdmin(actor);
     await OperatorService.getById(operatorId);
-    if (userId) await assertUserFree(userId, operatorId);
 
+    const link = db.update(operators).set({ userId }).where(eq(operators.id, operatorId));
     try {
-      await db.update(operators).set({ userId }).where(eq(operators.id, operatorId));
+      if (!userId) {
+        await link;
+        return;
+      }
+      await assertUserExists(userId);
+      await db.batch([releaseUser(userId, operatorId), link]);
     } catch (error) {
       if (isUniqueViolation(error, USER_CONSTRAINT)) throw userTaken();
       throw error;
@@ -121,9 +133,11 @@ export class OperatorService {
   }
 }
 
-async function assertUserFree(userId: string, operatorId: string | null) {
+async function assertUserExists(userId: string) {
   const user = await db.query.users.findFirst({ columns: { id: true }, where: { id: userId } });
   if (!user) throw new NotFoundError("User");
-  const linked = await db.query.operators.findFirst({ columns: { id: true }, where: { userId } });
-  if (linked && linked.id !== operatorId) throw userTaken();
 }
+
+/** Unlinks the account from whichever other operator holds it; batched with the new link so both land together. */
+const releaseUser = (userId: string, operatorId: string) =>
+  db.update(operators).set({ userId: null }).where(and(eq(operators.userId, userId), ne(operators.id, operatorId)));

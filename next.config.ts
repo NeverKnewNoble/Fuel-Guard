@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  // The Tankers page was renamed to Tanks; keep old bookmarks working.
+  async redirects() {
+    return [{ source: "/portal/tankers", destination: "/portal/tanks", permanent: true }];
+  },
   experimental: {
     /**
      * Portal pages are dynamic (they read the session), and Next caches those for 0s by default,

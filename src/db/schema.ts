@@ -73,6 +73,7 @@ export const usersCodeSeq = pgSequence("users_code_seq");
 export const equipmentCodeSeq = pgSequence("equipment_code_seq");
 export const tanksCodeSeq = pgSequence("tanks_code_seq");
 export const tankIntakesCodeSeq = pgSequence("tank_intakes_code_seq");
+export const tankTransfersCodeSeq = pgSequence("tank_transfers_code_seq");
 export const fuelEntriesCodeSeq = pgSequence("fuel_entries_code_seq");
 export const theftAlertsCodeSeq = pgSequence("theft_alerts_code_seq");
 
@@ -259,6 +260,42 @@ export const tankIntakes = pgTable(
     check("tank_intakes_cost_non_negative", sql`${t.costPerLitre} >= 0`),
     check(
       "tank_intakes_void_consistent",
+      sql`(${t.voidedAt} IS NULL) = (${t.voidedBy} IS NULL) AND (${t.voidedAt} IS NOT NULL OR ${t.voidReason} IS NULL)`
+    ),
+  ]
+);
+
+/** Fuel moved from one tank to another, e.g. topping up a day tank from the bulk tank. */
+export const tankTransfers = pgTable(
+  "tank_transfers",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    code: text("code").notNull().unique().default(codeDefault("tank_transfers_code_seq", "TRF", 3)),
+    fromTankId: uuid("from_tank_id")
+      .notNull()
+      .references(() => tanks.id, { onDelete: "restrict" }),
+    toTankId: uuid("to_tank_id")
+      .notNull()
+      .references(() => tanks.id, { onDelete: "restrict" }),
+    litres: litres("litres").notNull(),
+    transferredBy: uuid("transferred_by")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    transferredAt: tstz("transferred_at").notNull(),
+    note: text("note"),
+    /** Recorded in error: kept for history, but ignored by stock levels and the reconciliation. */
+    voidedAt: tstz("voided_at"),
+    voidedBy: uuid("voided_by").references(() => users.id, { onDelete: "restrict" }),
+    voidReason: text("void_reason"),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index("tank_transfers_from_tank_idx").on(t.fromTankId, t.transferredAt.desc()),
+    index("tank_transfers_to_tank_idx").on(t.toTankId, t.transferredAt.desc()),
+    check("tank_transfers_litres_positive", sql`${t.litres} > 0`),
+    check("tank_transfers_different_tanks", sql`${t.fromTankId} <> ${t.toTankId}`),
+    check(
+      "tank_transfers_void_consistent",
       sql`(${t.voidedAt} IS NULL) = (${t.voidedBy} IS NULL) AND (${t.voidedAt} IS NOT NULL OR ${t.voidReason} IS NULL)`
     ),
   ]
@@ -550,7 +587,7 @@ export const vEquipmentStandards = pgView("v_equipment_standards", {
 `);
 
 /**
- * A tank's running level: the last dip, plus deliveries and minus issues recorded since it.
+ * A tank's running level: the last dip, plus deliveries and transfers in, minus issues and transfers out recorded since it.
  * `measured_l` keeps the raw dip, so the reconciliation can still compare paper against reality.
  */
 export const vTankLevels = pgView("v_tank_levels", {
@@ -559,7 +596,7 @@ export const vTankLevels = pgView("v_tank_levels", {
   name: text("name").notNull(),
   siteId: uuid("site_id").notNull(),
   capacityL: litres("capacity_l").notNull(),
-  /** Last dip + intake − issued since that dip. 0 for a tank that has never been dipped or used. */
+  /** Last dip + intake − issued ± transfers since that dip. 0 for a tank that has never been dipped or used. */
   currentL: litres("current_l").notNull(),
   /** The last dip itself, or null when the tank has never been dipped. */
   measuredL: litres("measured_l"),
@@ -575,12 +612,15 @@ export const vTankLevels = pgView("v_tank_levels", {
     tk.name,
     tk.site_id,
     tk.capacity_l,
-    COALESCE(d.measured_l, 0) + COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0) AS current_l,
+    COALESCE(d.measured_l, 0) + COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0)
+      + COALESCE(m.transfer_in_l, 0) - COALESCE(m.transfer_out_l, 0) AS current_l,
     d.measured_l,
     d.measured_at,
-    COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0) AS since_dip_l,
+    COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0)
+      + COALESCE(m.transfer_in_l, 0) - COALESCE(m.transfer_out_l, 0) AS since_dip_l,
     round(
-      (COALESCE(d.measured_l, 0) + COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0)) / tk.capacity_l * 100,
+      (COALESCE(d.measured_l, 0) + COALESCE(m.intake_l, 0) - COALESCE(m.issued_l, 0)
+        + COALESCE(m.transfer_in_l, 0) - COALESCE(m.transfer_out_l, 0)) / tk.capacity_l * 100,
       1
     ) AS fill_pct,
     i.last_refill_at
@@ -596,7 +636,13 @@ export const vTankLevels = pgView("v_tank_levels", {
           AND (d.measured_at IS NULL OR received_at > d.measured_at)) AS intake_l,
       (SELECT sum(litres) FROM fuel_entries
         WHERE tank_id = tk.id AND voided_at IS NULL
-          AND (d.measured_at IS NULL OR dispensed_at > d.measured_at)) AS issued_l
+          AND (d.measured_at IS NULL OR dispensed_at > d.measured_at)) AS issued_l,
+      (SELECT sum(litres) FROM tank_transfers
+        WHERE to_tank_id = tk.id AND voided_at IS NULL
+          AND (d.measured_at IS NULL OR transferred_at > d.measured_at)) AS transfer_in_l,
+      (SELECT sum(litres) FROM tank_transfers
+        WHERE from_tank_id = tk.id AND voided_at IS NULL
+          AND (d.measured_at IS NULL OR transferred_at > d.measured_at)) AS transfer_out_l
   ) m ON true
   LEFT JOIN LATERAL (
     SELECT max(received_at) AS last_refill_at FROM tank_intakes WHERE tank_id = tk.id
@@ -613,6 +659,8 @@ export const vTankReconciliation = pgView("v_tank_reconciliation", {
   openingL: litres("opening_l").notNull(),
   intakeL: litres("intake_l").notNull(),
   issuedL: litres("issued_l").notNull(),
+  transferInL: litres("transfer_in_l").notNull(),
+  transferOutL: litres("transfer_out_l").notNull(),
   expectedL: litres("expected_l").notNull(),
   measuredL: litres("measured_l"),
   /** measured − expected; negative = unexplained loss. */
@@ -627,10 +675,14 @@ export const vTankReconciliation = pgView("v_tank_reconciliation", {
     COALESCE(b.opening_l, 0) AS opening_l,
     COALESCE(i.intake_l, 0) AS intake_l,
     COALESCE(f.issued_l, 0) AS issued_l,
-    COALESCE(b.opening_l, 0) + COALESCE(i.intake_l, 0) - COALESCE(f.issued_l, 0) AS expected_l,
+    COALESCE(x.transfer_in_l, 0) AS transfer_in_l,
+    COALESCE(x.transfer_out_l, 0) AS transfer_out_l,
+    COALESCE(b.opening_l, 0) + COALESCE(i.intake_l, 0) - COALESCE(f.issued_l, 0)
+      + COALESCE(x.transfer_in_l, 0) - COALESCE(x.transfer_out_l, 0) AS expected_l,
     COALESCE(b.closing_measured_l, d.measured_l) AS measured_l,
     COALESCE(b.closing_measured_l, d.measured_l)
-      - (COALESCE(b.opening_l, 0) + COALESCE(i.intake_l, 0) - COALESCE(f.issued_l, 0)) AS variance_l
+      - (COALESCE(b.opening_l, 0) + COALESCE(i.intake_l, 0) - COALESCE(f.issued_l, 0)
+        + COALESCE(x.transfer_in_l, 0) - COALESCE(x.transfer_out_l, 0)) AS variance_l
   FROM (
     SELECT
       id,
@@ -649,6 +701,14 @@ export const vTankReconciliation = pgView("v_tank_reconciliation", {
     SELECT sum(litres) AS issued_l FROM fuel_entries
     WHERE tank_id = tk.id AND voided_at IS NULL AND dispensed_at >= p.starts_at AND dispensed_at < p.ends_at
   ) f ON true
+  LEFT JOIN LATERAL (
+    SELECT
+      sum(litres) FILTER (WHERE to_tank_id = tk.id) AS transfer_in_l,
+      sum(litres) FILTER (WHERE from_tank_id = tk.id) AS transfer_out_l
+    FROM tank_transfers
+    WHERE (to_tank_id = tk.id OR from_tank_id = tk.id) AND voided_at IS NULL
+      AND transferred_at >= p.starts_at AND transferred_at < p.ends_at
+  ) x ON true
   LEFT JOIN LATERAL (
     SELECT measured_l FROM tank_dips
     WHERE tank_id = tk.id AND measured_at < p.ends_at

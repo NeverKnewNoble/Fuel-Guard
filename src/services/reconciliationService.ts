@@ -5,7 +5,7 @@ import type { ReconciliationReport, ReconciliationRow } from "@/types/tank";
 import { ReportingPeriodService } from "./reportingPeriodService";
 import { formatMonth, round, toNumber } from "./utils";
 
-/** Tankers → Stock reconciliation: opening + intake − issued = expected, compared with the measured dip. */
+/** Tanks → Stock reconciliation: opening + intake ± transfers − issued = expected, compared with the measured dip. */
 export class ReconciliationService {
   static async getForPeriod(periodId: string): Promise<ReconciliationRow[]> {
     const rows = await db
@@ -23,6 +23,8 @@ export class ReconciliationService {
         openingL: Number(r.openingL),
         intakeL: Number(r.intakeL),
         issuedL: Number(r.issuedL),
+        transferInL: Number(r.transferInL),
+        transferOutL: Number(r.transferOutL),
         expectedL: Number(r.expectedL),
         measuredL: toNumber(r.measuredL),
         varianceL,
@@ -36,7 +38,7 @@ export class ReconciliationService {
     return ReconciliationService.getForPeriod(period.id);
   }
 
-  /** The current month's rows, plus the month itself and the total unexplained loss, for the Tankers card. */
+  /** The current month's rows, plus the month itself and the total unexplained loss, for the Tanks card. */
   static async getCurrentReport(): Promise<ReconciliationReport> {
     const period = await ReportingPeriodService.getCurrent();
     const rows = await ReconciliationService.getForPeriod(period.id);

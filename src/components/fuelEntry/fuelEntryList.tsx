@@ -218,7 +218,7 @@ export default function FuelEntryList({ isAdmin }: { isAdmin: boolean }) {
         <div
           role="tablist"
           aria-label="Filter entries by status"
-          className="flex flex-wrap items-center gap-1 rounded-xl border border-slate-200 bg-white p-1"
+          className="flex flex-wrap items-center gap-1 rounded-xl border border-slate-200 bg-surface p-1"
         >
           {tabs.map((tab) => {
             const isActive = filter === tab.key;
@@ -250,7 +250,7 @@ export default function FuelEntryList({ isAdmin }: { isAdmin: boolean }) {
       </div>
 
       <SelectionProvider ids={entries.map((e) => e.id)}>
-        <section className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
+        <section className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-surface shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
           <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-5 py-4 sm:px-6">
             <div>
               <h2 className="text-lg font-semibold text-slate-900">{isAdmin ? "Daily fuel log" : "My fuel log"}</h2>
@@ -276,7 +276,7 @@ export default function FuelEntryList({ isAdmin }: { isAdmin: boolean }) {
               {query.isSuccess && entries.length > 0 && (
                 <a
                   href={exportHref(filter, [])}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-surface px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
                 >
                   Export log
                 </a>

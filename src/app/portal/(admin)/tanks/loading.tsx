@@ -1,8 +1,8 @@
 import { DataCardSkeleton, LoadingRegion, PageHeaderSkeleton, TankCardsSkeleton } from "@/components/ui/skeleton";
 
-export default function TankersLoading() {
+export default function TanksLoading() {
   return (
-    <LoadingRegion label="Loading tankers…" className="mx-auto w-full max-w-6xl">
+    <LoadingRegion label="Loading tanks…" className="mx-auto w-full max-w-6xl">
       <PageHeaderSkeleton actions={2} />
       <div className="mt-7">
         <TankCardsSkeleton count={4} />

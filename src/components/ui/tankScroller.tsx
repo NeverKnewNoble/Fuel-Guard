@@ -49,7 +49,7 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
 
   const header = (
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <h2 className="text-base font-semibold text-slate-900">Fuel tankers</h2>
+      <h2 className="text-base font-semibold text-slate-900">Fuel tanks</h2>
       <p className="text-sm text-slate-500">
         {totalAvailable.toLocaleString()} L available across {tanks.length} {tanks.length === 1 ? "tank" : "tanks"}
       </p>
@@ -64,8 +64,8 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
           <EmptyState
             bordered
             icon={Fuel}
-            title="No tankers yet"
-            description="Add a tanker with its capacity and opening level to start tracking stock."
+            title="No tanks yet"
+            description="Add a tank with its capacity and opening level to start tracking stock."
             action={emptyAction}
           />
         </div>
@@ -87,7 +87,7 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
   }
 
   const arrowClass =
-    "absolute top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 shadow-lg backdrop-blur transition-all hover:scale-105 hover:bg-brand-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 active:scale-95 sm:h-16 sm:w-16";
+    "absolute top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-surface/95 text-slate-700 shadow-lg backdrop-blur transition-all hover:scale-105 hover:bg-brand-500 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 active:scale-95 sm:h-16 sm:w-16";
 
   return (
     <section>
@@ -118,7 +118,7 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
         {!atStart && (
           <button
             type="button"
-            aria-label="Scroll tankers left"
+            aria-label="Scroll tanks left"
             onClick={() => nudge(-1)}
             className={`${arrowClass} left-2`}
           >
@@ -128,7 +128,7 @@ export default function TankScroller({ tanks, emptyAction }: { tanks: TankCardDa
         {!atEnd && (
           <button
             type="button"
-            aria-label="Scroll tankers right"
+            aria-label="Scroll tanks right"
             onClick={() => nudge(1)}
             className={`${arrowClass} right-2`}
           >

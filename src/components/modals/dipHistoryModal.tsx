@@ -39,7 +39,7 @@ function DipHistory({ onClose, tank }: Omit<Props, "open">) {
         ) : query.isError ? (
           <ErrorState size="sm" what="dips" message={query.error.message} onRetry={() => query.refetch()} retrying={query.isFetching} />
         ) : query.data.length === 0 ? (
-          <EmptyState size="sm" icon={Ruler} title="No dips recorded" description="Record a dip to set this tanker's level." />
+          <EmptyState size="sm" icon={Ruler} title="No dips recorded" description="Record a dip to set this tank's level." />
         ) : (
           <ul className="divide-y divide-slate-100 border-y border-slate-100">
             {query.data.map((dip) => (

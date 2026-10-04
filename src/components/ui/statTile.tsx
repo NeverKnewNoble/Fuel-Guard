@@ -17,7 +17,7 @@ export default function StatTile({
   accent = "text-slate-400",
 }: StatTileProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <div className="rounded-2xl border border-slate-200 bg-surface p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex items-start justify-between gap-2">
         <p className="text-sm text-slate-500">{label}</p>
         <Icon className={`h-4 w-4 shrink-0 ${accent}`} aria-hidden />

@@ -1,16 +1,17 @@
 "use client";
 
-import { CircleAlert, Fuel, LoaderCircle, Moon } from "lucide-react";
+import { CircleAlert, Fuel, LoaderCircle } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { login } from "@/app/auth/actions";
+import ThemeToggle from "@/components/ui/themeToggle";
 // Demo quick access is commented out below; these come back with it.
 // import type { DemoUser } from "@/types/user";
 // import { demoUsers } from "@/utils/marketingContent";
 
 const inputClass =
-  "mt-2 h-12 w-full rounded-xl bg-slate-100 px-4 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-brand-500/50 disabled:opacity-60";
+  "mt-2 h-12 w-full rounded-xl bg-slate-100 px-4 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-surface focus:ring-2 focus:ring-brand-500/50 disabled:opacity-60";
 
 export default function LoginForm({
   callbackUrl,
@@ -42,13 +43,7 @@ export default function LoginForm({
 
   return (
     <div className="relative flex min-h-screen flex-1 flex-col items-center justify-center bg-slate-50 px-4 py-12">
-      <button
-        type="button"
-        aria-label="Switch to dark mode"
-        className="absolute right-3 top-3 sm:right-5 sm:top-5 rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-200/70 hover:text-slate-600"
-      >
-        <Moon className="h-5 w-5" aria-hidden />
-      </button>
+      <ThemeToggle className="absolute right-3 top-3 sm:right-5 sm:top-5" />
 
       <div className="w-full max-w-107.5">
         {/* Brand */}
@@ -56,18 +51,13 @@ export default function LoginForm({
           <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-brand-500 text-white shadow-sm">
             <Fuel className="h-7 w-7" strokeWidth={1.8} aria-hidden />
           </span>
-          <div>
-            <h1 className="text-[26px] font-medium leading-tight tracking-tight text-slate-900">
-              FuelGuard
-            </h1>
-            <p className="text-sm text-slate-500">
-              Royal Dede Construction Limited
-            </p>
-          </div>
+          <h1 className="text-[26px] font-medium leading-tight tracking-tight text-slate-900">
+            FuelGuard
+          </h1>
         </div>
 
         {/* Card */}
-        <div className="mt-8 rounded-2xl bg-white p-6 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-8">
+        <div className="mt-8 rounded-2xl bg-surface p-6 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-8">
           <div className="text-center">
             <h2 className="text-xl font-semibold text-slate-900">
               Sign in to your account
@@ -102,7 +92,7 @@ export default function LoginForm({
               type="email"
               required
               autoComplete="email"
-              placeholder="you@royaldede.com"
+              placeholder="you@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={pending}

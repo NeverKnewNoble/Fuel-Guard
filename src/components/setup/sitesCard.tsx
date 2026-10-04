@@ -59,7 +59,7 @@ function SiteRowActions({ site }: { site: SiteUsageRow }) {
       >
         <p className="rounded-xl bg-slate-50 p-3.5 text-sm text-slate-600">
           {inUse
-            ? `${site.equipmentCount} unit${site.equipmentCount === 1 ? "" : "s"} and ${site.tankCount} tanker${site.tankCount === 1 ? "" : "s"} are still based here. Move them to another site first.`
+            ? `${site.equipmentCount} unit${site.equipmentCount === 1 ? "" : "s"} and ${site.tankCount} tank${site.tankCount === 1 ? "" : "s"} are still based here. Move them to another site first.`
             : "It stops appearing in site pickers. Fuel entries and other records keep the site they were recorded at."}
         </p>
       </ConfirmDialog>
@@ -80,7 +80,7 @@ export default function SitesCard() {
       <EmptyState
         icon={MapPin}
         title="No sites yet"
-        description="Add the places work happens. Equipment, tankers and records takers are all assigned to a site."
+        description="Add the places work happens. Equipment, tanks and records takers are all assigned to a site."
         action={<AddSiteButton />}
       />
     )
@@ -113,7 +113,7 @@ export default function SitesCard() {
             />
             <MobileFields>
               <MobileField label="Equipment"><span className="tabular-nums">{site.equipmentCount}</span></MobileField>
-              <MobileField label="Tankers"><span className="tabular-nums">{site.tankCount}</span></MobileField>
+              <MobileField label="Tanks"><span className="tabular-nums">{site.tankCount}</span></MobileField>
             </MobileFields>
           </li>
         ))}
@@ -126,7 +126,7 @@ export default function SitesCard() {
               <th scope="col" className="px-3 py-2.5 text-left font-semibold">Site</th>
               <th scope="col" className="px-3 py-2.5 text-left font-semibold">Region</th>
               <th scope="col" className="px-3 py-2.5 text-right font-semibold">Equipment</th>
-              <th scope="col" className="px-3 py-2.5 text-right font-semibold">Tankers</th>
+              <th scope="col" className="px-3 py-2.5 text-right font-semibold">Tanks</th>
               <th scope="col" className="px-3 py-2.5 text-right font-semibold">Status</th>
               <th scope="col" className="px-5 py-2.5 text-right font-semibold sm:px-6">Actions</th>
             </tr>

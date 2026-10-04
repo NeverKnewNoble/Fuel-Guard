@@ -97,7 +97,7 @@ export async function updateFuelEntryAction(formData: FormData): Promise<ActionS
       formText(formData.get("id")),
       {
         dispensedAt: accraDateTime(formData.get("date"), formData.get("time")),
-        // Equipment and tanker can't move: void the entry and record another instead.
+        // Equipment and tank can't move: void the entry and record another instead.
         equipmentId: formText(formData.get("equipmentId")),
         tankId: formText(formData.get("tankId")),
         operatorId: formText(formData.get("operatorId")),

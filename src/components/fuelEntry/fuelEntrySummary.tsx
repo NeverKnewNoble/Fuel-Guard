@@ -16,7 +16,7 @@ export default function FuelEntrySummary() {
   if (query.isPending) return <StatTilesSkeleton count={4} className={GRID} />;
   if (query.isError) {
     return (
-      <div className="mt-7 rounded-2xl border border-slate-200 bg-white">
+      <div className="mt-7 rounded-2xl border border-slate-200 bg-surface">
         <ErrorState size="sm" what="the entry summary" message={query.error.message} onRetry={() => query.refetch()} retrying={query.isFetching} />
       </div>
     );

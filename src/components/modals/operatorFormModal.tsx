@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Field, FieldRow, PrimaryButton, SecondaryButton, SelectInput, TextInput } from "@/components/modals/fields";
@@ -41,11 +42,14 @@ function OperatorForm({ onClose, operator }: Omit<Props, "open">) {
   const pending = mutation.isPending;
   const errors = fieldErrors(mutation.error);
 
-  // Each account can be linked to at most one operator.
-  const takenUserIds = new Set(
-    (operators.data ?? []).filter((o) => o.userId && o.id !== operator?.id).map((o) => o.userId as string)
+  // Each account belongs to one operator at a time. Accounts already linked to someone else are
+  // still listed, with who has them, and choosing one moves it here.
+  const [userId, setUserId] = useState(operator?.userId ?? "");
+  const linkedTo = new Map(
+    (operators.data ?? []).filter((o) => o.userId && o.id !== operator?.id).map((o) => [o.userId as string, o.name])
   );
-  const linkable = (accounts.data ?? []).filter((a) => !takenUserIds.has(a.id));
+  const movingFrom = userId ? linkedTo.get(userId) : undefined;
+  const selectedName = accounts.data?.find((a) => a.id === userId)?.name;
 
   return (
     <Modal
@@ -121,19 +125,36 @@ function OperatorForm({ onClose, operator }: Omit<Props, "open">) {
           hint="Optional — link them if they also sign in to record fills"
           error={errors?.userId}
         >
-          <SelectInput id="op-user" name="userId" defaultValue={operator?.userId ?? ""} disabled={pending || accounts.isPending}>
+          <SelectInput
+            id="op-user"
+            name="userId"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            disabled={pending || accounts.isPending}
+          >
             <option value="">Not linked</option>
-            {linkable.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.name} — {a.roleLabel}
-              </option>
-            ))}
+            {accounts.data?.map((a) => {
+              const holder = linkedTo.get(a.id);
+              return (
+                <option key={a.id} value={a.id}>
+                  {a.name} — {a.roleLabel}
+                  {holder ? ` (linked to ${holder})` : ""}
+                </option>
+              );
+            })}
           </SelectInput>
         </Field>
 
-        {accounts.isSuccess && linkable.length === 0 && (
+        {movingFrom && (
+          <p role="status" className="rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-sm text-amber-800">
+            {selectedName}&rsquo;s account is linked to <span className="font-medium">{movingFrom}</span>. Saving moves it to{" "}
+            {editing ? operator!.name : "this operator"}, and {movingFrom} will no longer have a portal account.
+          </p>
+        )}
+
+        {accounts.isSuccess && accounts.data.length === 0 && (
           <p className="rounded-xl bg-slate-50 p-3.5 text-sm text-slate-600">
-            Every account is already linked to an operator. Create one on{" "}
+            There are no portal accounts yet. Create one on{" "}
             <Link href="/portal/users_and_roles" className="font-medium underline" onClick={onClose}>
               Users &amp; Roles
             </Link>{" "}

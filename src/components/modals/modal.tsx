@@ -87,7 +87,7 @@ export default function Modal({
         type="button"
         aria-label="Close dialog"
         onClick={onClose}
-        className="absolute inset-0 cursor-default bg-slate-900/40 backdrop-blur-sm animate-[fadeIn_150ms_ease-out]"
+        className="absolute inset-0 cursor-default bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm animate-[fadeIn_150ms_ease-out]"
       />
 
       <div
@@ -95,7 +95,7 @@ export default function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className={`relative flex max-h-[90dvh] w-full flex-col overflow-hidden rounded-2xl bg-white shadow-2xl animate-[modalIn_180ms_cubic-bezier(0.16,1,0.3,1)] ${
+        className={`relative flex max-h-[90dvh] w-full flex-col overflow-hidden rounded-2xl bg-surface shadow-2xl animate-[modalIn_180ms_cubic-bezier(0.16,1,0.3,1)] ${
           size === "lg" ? "max-w-2xl" : "max-w-lg"
         }`}
       >

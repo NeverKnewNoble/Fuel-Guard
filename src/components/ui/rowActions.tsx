@@ -106,7 +106,7 @@ export default function RowActions({ label, onEdit, onDelete, items }: RowAction
           role="menu"
           aria-label={`Actions for ${label}`}
           style={position}
-          className={`fixed z-40 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg ${
+          className={`fixed z-40 overflow-hidden rounded-xl border border-slate-200 bg-surface py-1 shadow-lg ${
             items ? "w-48" : "w-36"
           }`}
         >

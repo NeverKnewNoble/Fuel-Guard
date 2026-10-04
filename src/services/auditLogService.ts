@@ -11,6 +11,7 @@ export const AUDIT_ACTIONS = {
   equipmentCreate: "equipment.create", equipmentUpdate: "equipment.update", equipmentStatusChange: "equipment.status_change",
   tankCreate: "tank.create", tankUpdate: "tank.update", tankArchive: "tank.archive",
   intakeUpdate: "intake.update", intakeVoid: "intake.void", intakeRestore: "intake.restore",
+  transferCreate: "transfer.create", transferVoid: "transfer.void", transferRestore: "transfer.restore",
   fuelEntryUpdate: "fuel_entry.update", fuelEntryVoid: "fuel_entry.void", fuelEntryRestore: "fuel_entry.restore",
   fuelEntryCorrect: "fuel_entry.correct", fuelEntryCorrectionRejected: "fuel_entry.correction_rejected",
   alertResolve: "alert.resolve", alertReopen: "alert.reopen",

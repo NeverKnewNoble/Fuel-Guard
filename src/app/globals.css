@@ -27,10 +27,66 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/*
+ * Dark mode: <html data-theme="dark">, set before paint by the script in the root layout and
+ * switched by ThemeToggle. Rather than a dark: variant on every class, the palette itself flips:
+ * slate is inverted (slate-900 text turns light, slate-50 backgrounds turn dark) and the pale
+ * tints / deep text shades of the accent colours are swapped for their dark-surface equivalents.
+ * Mid shades (400–600) are left alone so buttons and badges keep their colour. Card backgrounds
+ * use bg-surface instead of bg-white so text-white on buttons stays white.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --color-surface: #ffffff;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0b1120;
+  --foreground: #f1f5f9;
+  --color-surface: #121a2b;
+
+  --color-slate-50: #0b1120;
+  --color-slate-100: #1a2336;
+  --color-slate-200: #273247;
+  --color-slate-300: #3a4760;
+  --color-slate-400: #6f7e97;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #b0bccd;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #e2e8f0;
+  --color-slate-900: #f1f5f9;
+  --color-slate-950: #f8fafc;
+
+  --color-brand-50: #2a1418;
+  --color-brand-100: #3a181d;
+  --color-brand-200: #5a2129;
+  --color-brand-300: #7a2a33;
+  --color-brand-700: #f1989f;
+  --color-brand-800: #f8c3c8;
+  --color-brand-900: #fce3e5;
+
+  --color-amber-50: #2a2010;
+  --color-amber-100: #3a2b10;
+  --color-amber-200: #5a4214;
+  --color-amber-700: #fcd34d;
+  --color-amber-800: #fde68a;
+
+  --color-emerald-50: #0f2a22;
+  --color-emerald-100: #12382c;
+  --color-emerald-200: #1a4d3c;
+  --color-emerald-700: #6ee7b7;
+
+  --color-sky-50: #0f2233;
+  --color-sky-200: #1c3f5c;
+  --color-sky-700: #7dd3fc;
+}
+
+@layer base {
+  /* Focus rings with an offset otherwise leave a white gap on dark cards. */
+  [data-theme="dark"] * {
+    --tw-ring-offset-color: var(--color-surface);
   }
 }
 

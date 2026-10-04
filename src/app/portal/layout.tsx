@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import QueryProvider from "@/components/providers/queryProvider";
+import HistoryNav from "@/components/ui/historyNav";
 import Sidebar from "@/components/ui/sidebar";
+import ThemeToggle from "@/components/ui/themeToggle";
 import { unreadAlertsQuery } from "@/queries/alertQueries";
 import { getQueryClient, prefetch } from "@/queries/queryClient";
 import { TheftAlertService } from "@/services/theftAlertService";
@@ -27,7 +29,13 @@ export default async function PortalLayout({ children }: LayoutProps<"/portal">)
       <HydrationBoundary state={dehydrate(queryClient)}>
         <div className="flex min-h-screen flex-1 flex-col bg-slate-50 md:pl-64">
           <Sidebar user={{ name: name ?? email ?? "Signed in", role }} />
-          <main className="flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">{children}</main>
+          <main className="flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+            <div className="mb-5 flex items-center justify-between">
+              <HistoryNav />
+              <ThemeToggle />
+            </div>
+            {children}
+          </main>
         </div>
       </HydrationBoundary>
     </QueryProvider>

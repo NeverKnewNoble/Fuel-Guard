@@ -1,5 +1,5 @@
 # FuelGuard — Database Schema
-Database design for the whole FuelGuard system: every table, how the tables relate, and the rules the data must follow. It is derived from the screens and forms that exist in the app today (Dashboard, Fuel Entry, Tankers, Monthly Summary, Theft Alerts, Equipment & Vehicles, Consumption Standards, Users & Roles, Login).
+Database design for the whole FuelGuard system: every table, how the tables relate, and the rules the data must follow. It is derived from the screens and forms that exist in the app today (Dashboard, Fuel Entry, Tanks, Monthly Summary, Theft Alerts, Equipment & Vehicles, Consumption Standards, Users & Roles, Login).
 
 - **Database:** PostgreSQL (Neon), accessed with Drizzle ORM — see `drizzle.config.ts` and `src/db/`.
 - **Status:** implemented in `src/db/schema.ts` (tables, enums, sequences, views) and `src/db/relations.ts`. Initial migration: `drizzle/20260914000829_init/`. Not yet applied to the database — run `yarn db:migrate`.
@@ -332,13 +332,13 @@ Check: `watch.percent < high.percent < critical.percent`. Enforce it in the upda
 ### 4.3 Fuel stock
 
 #### `tanks`
-Bulk tanks, mobile bowsers and day tanks that hold fuel on site (Tankers page).
+Bulk tanks, mobile bowsers and day tanks that hold fuel on site (Tanks page).
 
 | Column | Type | Notes |
 | --- | --- | --- |
 | `id` | uuid PK | |
 | `code` | text UK not null | `TNK-01` |
-| `name` | text not null | `Bulk Tanker A` |
+| `name` | text not null | `Bulk Tank A` |
 | `kind` | `tank_kind` not null | |
 | `site_id` | uuid FK → `sites` not null | |
 | `capacity_l` | numeric(10,2) not null | Check `> 0`. |
@@ -359,7 +359,7 @@ A tank has no `current_l` column. The current level is derived in `v_tank_levels
 | `created_at` | timestamptz | |
 
 #### `tank_intakes`
-Deliveries received **into** a tank (Tankers → Record Intake / Intake log).
+Deliveries received **into** a tank (Tanks → Record Intake / Intake log).
 
 | Column | Type | Notes |
 | --- | --- | --- |
@@ -424,7 +424,7 @@ One row per fill — fuel drawn **from a tank into a unit** (New Fuel Entry form
 | `code` | text UK not null | `LOG-2400` |
 | `dispensed_at` | timestamptz not null | Form's Date + Time. |
 | `equipment_id` | uuid FK → `equipment` not null | |
-| `tank_id` | uuid FK → `tanks` not null | "Drawn from tanker". |
+| `tank_id` | uuid FK → `tanks` not null | "Drawn from tank". |
 | `operator_id` | uuid FK → `operators` not null | "Driver / operator". |
 | `site_id` | uuid FK → `sites` not null | Snapshot of where it happened; equipment can move later. |
 | `location_activity` | text not null | "Site A – Main Pit, grading". |
@@ -543,7 +543,7 @@ These numbers are computed rather than stored, so they can't drift from the unde
 | --- | --- | --- |
 | `v_equipment_standards` | Registry, Monthly Summary, alert checks | Equipment joined to its type, with effective L/km and L/hr standards (§4.2). |
 | `v_tank_levels` | Tank cards (current level, % full, last refill) | **Running level:** latest `tank_dips.measured_l` + Σ `tank_intakes.litres` − Σ `fuel_entries.litres` recorded *after* that dip, so a delivery moves the level straight away. Also exposes `measured_l` / `measured_at` (the dip itself) and `since_dip_l` (net movement since). `last_refill` = latest `tank_intakes.received_at`. |
-| `v_tank_reconciliation` | Tankers → Stock reconciliation | Per tank for a period: `opening_l` (from `tank_period_balances`) + Σ intakes − Σ fuel_entries litres = **expected**; latest dip = **measured**; `measured − expected` = **variance** (negative = unexplained loss). Measured stays the **raw dip** on purpose: comparing the records against a physical measurement is the whole point, so a tank that hasn't been dipped since its last delivery shows a gap until someone dips it. |
+| `v_tank_reconciliation` | Tanks → Stock reconciliation | Per tank for a period: `opening_l` (from `tank_period_balances`) + Σ intakes − Σ fuel_entries litres = **expected**; latest dip = **measured**; `measured − expected` = **variance** (negative = unexplained loss). Measured stays the **raw dip** on purpose: comparing the records against a physical measurement is the whole point, so a tank that hasn't been dipped since its last delivery shows a gap until someone dips it. |
 | `v_monthly_equipment_summary` | Monthly Summary → Per-equipment breakdown | Per equipment per month: Σ litres, Σ km, Σ hours, avg L/km = Σ litres ÷ Σ km, avg L/hr = Σ litres ÷ Σ hours, effective standard, variance % = (avg − std) ÷ std × 100, Σ (litres × unit_cost_ghs), and a status bucketed by `alert_thresholds`. |
 | `v_daily_issuance` | Dashboard → Daily fuel issuance chart | Σ `fuel_entries.litres` grouped by `date(dispensed_at AT TIME ZONE 'Africa/Accra')`. |
 
@@ -614,7 +614,7 @@ Enforce these in server actions (optionally backed by Postgres row-level securit
 | `ConsumptionStandard` | `equipment_types` |
 | `AlertThreshold` | `alert_thresholds` |
 | `FuelTank` | `tanks` + `v_tank_levels` + `v_tank_reconciliation` |
-| `TankerIntake` | `tank_intakes` + `suppliers` |
+| `TankIntake` | `tank_intakes` + `suppliers` |
 | `LogEntry` | `fuel_entries` (+ `operators`) |
 | `TheftAlert` | `theft_alerts` + `alert_fuel_entries` (+ `alert_reads`) |
 | `MonthlySummaryRow` | `v_monthly_equipment_summary` |

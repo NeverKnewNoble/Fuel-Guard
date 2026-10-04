@@ -84,7 +84,7 @@ function NewFuelEntryForm({ onClose }: { onClose: () => void }) {
       open
       onClose={onClose}
       title="New Fuel Log Entry"
-      description="Records the fuel an equipment draws from a tanker. Submitted entries can only be changed by requesting a correction."
+      description="Records the fuel an equipment draws from a tank. Submitted entries can only be changed by requesting a correction."
       size="lg"
       footer={
         <>
@@ -110,9 +110,9 @@ function NewFuelEntryForm({ onClose }: { onClose: () => void }) {
             </>
           ) : noTanks ? (
             <>
-              No tanker is available to draw from. Add one on{" "}
-              <Link href="/portal/tankers" className="font-medium underline" onClick={onClose}>
-                Tankers
+              No tank is available to draw from. Add one on{" "}
+              <Link href="/portal/tanks" className="font-medium underline" onClick={onClose}>
+                Tanks
               </Link>
               .
             </>
@@ -175,10 +175,10 @@ function NewFuelEntryForm({ onClose }: { onClose: () => void }) {
 
           <FieldRow>
             <DerivedValue label="Equipment type" value={unit ? `${unit.typeName} · ${km ? "odometer" : "hour meter"}` : "Select equipment first"} />
-            <Field label="Drawn from tanker" htmlFor="fe-tank" required error={errors?.tankId}>
+            <Field label="Drawn from tank" htmlFor="fe-tank" required error={errors?.tankId}>
               <SelectInput id="fe-tank" name="tankId" defaultValue="" required disabled={pending || tanks.isPending}>
                 <option value="" disabled>
-                  {tanks.isPending ? "Loading tankers…" : "Select tanker…"}
+                  {tanks.isPending ? "Loading tanks…" : "Select tank…"}
                 </option>
                 {tanks.data?.map((t) => (
                   <option key={t.id} value={t.id}>

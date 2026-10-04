@@ -40,7 +40,7 @@ function SiteForm({ onClose, site }: Omit<Props, "open">) {
       description={
         editing
           ? "The site code can't change once records point at it."
-          : "A place work happens: equipment, tankers and records takers are all assigned to one."
+          : "A place work happens: equipment, tanks and records takers are all assigned to one."
       }
       footer={
         <>

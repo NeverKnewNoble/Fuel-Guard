@@ -121,7 +121,7 @@ export function DailyIssuanceChart({ data }: { data: DailyIssuancePoint[] }) {
                 x2={W - PAD.right}
                 y1={y(t)}
                 y2={y(t)}
-                stroke="#e2e8f0"
+                className="stroke-slate-200"
                 strokeWidth="1"
                 strokeDasharray={t === 0 ? undefined : "3 3"}
               />
@@ -178,7 +178,7 @@ export function DailyIssuanceChart({ data }: { data: DailyIssuancePoint[] }) {
                   x2={x(i)}
                   y1={PAD.top}
                   y2={PAD.top + plotH}
-                  stroke="#94a3b8"
+                  className="stroke-slate-400"
                   strokeWidth="1"
                 />
               )}
@@ -187,7 +187,7 @@ export function DailyIssuanceChart({ data }: { data: DailyIssuancePoint[] }) {
                 cy={y(d.litres)}
                 r={hover === i ? 5 : 0}
                 fill={SERIES_ACTUAL}
-                stroke="#ffffff"
+                className="stroke-surface"
                 strokeWidth="2"
               />
               {/* Hit target, wider than the mark */}
@@ -270,7 +270,7 @@ export function ConsumptionChart({ data }: { data: ConsumptionComparison[] }) {
                 x2={W - PAD.right}
                 y1={y(t)}
                 y2={y(t)}
-                stroke="#e2e8f0"
+                className="stroke-slate-200"
                 strokeWidth="1"
                 strokeDasharray={t === 0 ? undefined : "3 3"}
               />
@@ -301,7 +301,7 @@ export function ConsumptionChart({ data }: { data: ConsumptionComparison[] }) {
                   y={PAD.top}
                   width={groupW}
                   height={plotH}
-                  fill={isHover ? "#f1f5f9" : "transparent"}
+                  className={isHover ? "fill-slate-100" : "fill-transparent"}
                 />
                 {/* 2px surface gap between adjacent bars */}
                 <rect

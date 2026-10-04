@@ -64,7 +64,7 @@ export default function AlertQueueCard() {
 
   return (
     <>
-      <div role="tablist" aria-label="Filter alerts by state" className="mb-4 flex flex-wrap items-center gap-1 rounded-xl border border-slate-200 bg-white p-1">
+      <div role="tablist" aria-label="Filter alerts by state" className="mb-4 flex flex-wrap items-center gap-1 rounded-xl border border-slate-200 bg-surface p-1">
         {TABS.map((tab) => {
           const isActive = filter === tab.key;
           return (
@@ -103,7 +103,7 @@ export default function AlertQueueCard() {
                   })
                 }
                 disabled={unread === 0 || markAllRead.isPending}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:text-slate-400 disabled:hover:bg-white"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-surface px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:text-slate-400 disabled:hover:bg-surface"
               >
                 {markAllRead.isPending ? <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden /> : <CheckCheck className="h-4 w-4" aria-hidden />}
                 Mark all as read
@@ -161,7 +161,7 @@ export default function AlertQueueCard() {
                               { onSuccess: (result) => toast.success(`${alert.code} under review`, { description: result.message }) }
                             )
                           }
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-60"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-surface px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-60"
                         >
                           <Eye className="h-3.5 w-3.5 text-slate-400" aria-hidden />
                           Start review
@@ -189,7 +189,7 @@ export default function AlertQueueCard() {
                               }
                             )
                           }
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-60"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-surface px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-60"
                         >
                           <RotateCcw className="h-3.5 w-3.5 text-slate-400" aria-hidden />
                           Reopen

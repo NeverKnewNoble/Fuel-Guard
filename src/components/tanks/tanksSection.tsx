@@ -2,20 +2,20 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { AddTankerButton } from "@/components/modals/triggers";
+import { AddTankButton } from "@/components/modals/triggers";
 import ErrorState from "@/components/ui/errorState";
 import { TankCardsSkeleton } from "@/components/ui/skeleton";
 import TankScroller from "@/components/ui/tankScroller";
 import { tanksQuery } from "@/queries/tankQueries";
 
-/** The "Fuel tankers" row of level cards. */
+/** The "Fuel tanks" row of level cards. */
 export default function TanksSection() {
   const query = useQuery(tanksQuery());
 
   if (query.isPending) {
     return (
       <div role="status">
-        <span className="sr-only">Loading tankers…</span>
+        <span className="sr-only">Loading tanks…</span>
         <TankCardsSkeleton count={4} />
       </div>
     );
@@ -24,13 +24,13 @@ export default function TanksSection() {
   if (query.isError) {
     return (
       <section>
-        <h2 className="text-base font-semibold text-slate-900">Fuel tankers</h2>
-        <div className="mt-3 rounded-2xl border border-slate-200 bg-white">
-          <ErrorState size="sm" what="tankers" message={query.error.message} onRetry={() => query.refetch()} retrying={query.isFetching} />
+        <h2 className="text-base font-semibold text-slate-900">Fuel tanks</h2>
+        <div className="mt-3 rounded-2xl border border-slate-200 bg-surface">
+          <ErrorState size="sm" what="tanks" message={query.error.message} onRetry={() => query.refetch()} retrying={query.isFetching} />
         </div>
       </section>
     );
   }
 
-  return <TankScroller tanks={query.data} emptyAction={<AddTankerButton />} />;
+  return <TankScroller tanks={query.data} emptyAction={<AddTankButton />} />;
 }

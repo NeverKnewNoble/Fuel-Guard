@@ -66,7 +66,7 @@ function CreateUserForm({ onClose }: { onClose: () => void }) {
             id="u-email"
             name="email"
             type="email"
-            placeholder="ama.boateng@royaldede.com"
+            placeholder="ama.boateng@company.com"
             required
             autoComplete="off"
             disabled={pending}

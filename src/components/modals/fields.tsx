@@ -4,7 +4,7 @@ import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 
 const control =
-  "h-12 w-full rounded-xl bg-slate-100 px-4 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-brand-500/50";
+  "h-12 w-full rounded-xl bg-slate-100 px-4 text-[15px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-surface focus:ring-2 focus:ring-brand-500/50";
 
 export function Field({
   label,
@@ -112,7 +112,7 @@ export function SecondaryButton({
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2"
+      className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-surface px-5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2"
       {...props}
     >
       {children}
