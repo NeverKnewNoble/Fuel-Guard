@@ -51,9 +51,14 @@ export default function LoginForm({
           <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-brand-500 text-white shadow-sm">
             <Fuel className="h-7 w-7" strokeWidth={1.8} aria-hidden />
           </span>
-          <h1 className="text-[26px] font-medium leading-tight tracking-tight text-slate-900">
-            FuelGuard
-          </h1>
+          <div>
+            <h1 className="text-[26px] font-medium leading-tight tracking-tight text-slate-900">
+              FuelGuard
+            </h1>
+            <p className="text-sm text-slate-500">
+              Royal Dede Construction Limited
+            </p>
+          </div>
         </div>
 
         {/* Card */}
@@ -92,7 +97,7 @@ export default function LoginForm({
               type="email"
               required
               autoComplete="email"
-              placeholder="you@company.com"
+              placeholder="you@royaldede.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={pending}
