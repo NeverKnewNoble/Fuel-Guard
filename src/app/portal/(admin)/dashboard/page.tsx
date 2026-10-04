@@ -37,7 +37,7 @@ export default async function DashboardPage() {
         <PageHeader
           eyebrow="Overview"
           title="Dashboard"
-          description={formatMonth(monthStart())}
+          description={`Royal Dede Construction — ${formatMonth(monthStart())}`}
           action={<NewFuelLogEntryButton />}
         />
 

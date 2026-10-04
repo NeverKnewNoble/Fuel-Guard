@@ -91,6 +91,9 @@ function Brand() {
         <span className="block truncate text-[15px] font-semibold leading-tight text-slate-900">
           FuelGuard
         </span>
+        <span className="block truncate text-xs text-slate-500">
+          Royal Dede Construction Ltd
+        </span>
       </span>
     </Link>
   );

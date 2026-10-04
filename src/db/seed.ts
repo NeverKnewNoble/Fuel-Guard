@@ -40,14 +40,14 @@ async function main() {
     .values([
       {
         name: "Kwabena Adjei",
-        email: "kwabena.adjei@example.com",
+        email: "kwabena.adjei@royaldede.com",
         role: "administrator",
         status: "active",
         passwordHash,
       },
       {
         name: "Kwame Asante",
-        email: "kwame.asante@example.com",
+        email: "kwame.asante@royaldede.com",
         role: "records_taker",
         status: "active",
         siteId: siteA.id,

@@ -140,11 +140,11 @@ export const demoUsers: DemoUser[] = [
   {
     role: "Administrator",
     name: "Kwabena Adjei",
-    email: "kwabena.adjei@example.com",
+    email: "kwabena.adjei@royaldede.com",
   },
   {
     role: "Records Taker",
     name: "Kwame Asante",
-    email: "kwame.asante@example.com",
+    email: "kwame.asante@royaldede.com",
   },
 ];
